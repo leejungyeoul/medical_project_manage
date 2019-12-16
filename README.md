@@ -7,7 +7,7 @@ AWS Cloud(EC2, RDS) , ubuntu , Docker , React.js , Node.js , MySql
 1. 회원가입, 로그인(bcript 단방향 암호화)
 2. 게시판 형태(CRUD, 이미지 & 파일 업로드)
 3. 시스템 알림
-4. 스케쥴러(시스템 배치)
+4. 스케러(시스템 배치)
 5. 메일발송
 6. 로그 수집/조회
 7. 트렌젝션 처리
