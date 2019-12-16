@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MessageMapper">  
+
+  <insert id="insertNoticeMessage"> 
+    INSERT INTO rtrod.rtrod_notification
+    (
+          notice_code
+          , notice_user_email
+          , notice_message
+          , notice_flag
+          , notice_pjt_code
+          , reg_date
+    )
+    VALUES (
+        <choose>
+          <when test="is_Notice_code != null and is_Notice_code != '' ">
+            #{is_Notice_code}
+          </when>
+          <otherwise>
+            CONCAT('NT', DATE_FORMAT(now(), '%Y%m%d%H%i%s'))  
+          </otherwise>
+        </choose>
+          , #{is_Receiver}
+          , #{is_Message}
+          , 'N'
+          , #{is_Pjtcode}
+          , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+    )
+  </insert>
+
+  <insert id="insertNoticeAdminMessage"> 
+    INSERT INTO rtrod.rtrod_notification
+    (
+          notice_code
+          , notice_user_email
+          , notice_message
+          , notice_flag
+          , notice_pjt_code
+          , reg_date
+    )
+        SELECT 
+        <choose>
+          <when test="is_Notice_code != null and is_Notice_code != '' ">
+            #{is_Notice_code}
+          </when>
+          <otherwise>
+            CONCAT('NT', DATE_FORMAT(now(), '%Y%m%d%H%i%s'))  
+          </otherwise>
+        </choose>
+        ,useremail
+        , #{is_Message}
+        , 'N'
+        , #{is_Pjtcode}
+        , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+        FROM rtrod.rtrod_user
+        WHERE userflag = 'M';
+  </insert>
+  
+  <select id="selectNoticeMessageList">
+      SELECT 
+        notice_code
+        , notice_user_email
+        , notice_message
+        , notice_flag
+        , notice_pjt_code
+        , reg_date
+      FROM rtrod.rtrod_notification
+      WHERE notice_flag = 'N'
+      <if test="is_Email != null && is_Email != ''">
+        AND notice_user_email = #{is_Email}
+      </if>
+      ORDER BY reg_date DESC
+  </select>
+
+  <update id="updateNoticeMessageFlag">
+    UPDATE rtrod.rtrod_notification
+    SET
+    notice_flag = 'Y'
+    <if test="is_Notice_code != null && is_Notice_code != ''">
+		  WHERE notice_code = #{is_Notice_code}
+    </if>
+	</update>
+
+</mapper>
+

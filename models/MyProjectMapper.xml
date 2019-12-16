@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MyProjectMapper">  
+  <select id="selectMypjtList">
+      SELECT 
+        pjt_code
+        , pjt_name
+        , pjt_owner
+        , pjt_owner_email
+        , pjt_type
+        , pjt_status
+        , pjt_start_date
+        , pjt_end_date
+        , rtrod.GET_SUB_CODENM(pjt_field) AS pjt_field
+        , pjt_field AS pjt_field_cd
+        , pjt_contents
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+      FROM rtrod.rtrod_projects
+      <if test="is_Owner_email != null && is_Owner_email != ''">
+        WHERE pjt_owner_email = #{is_Owner_email}
+      </if>
+  </select>
+
+  <select id="selectResearcherList">
+      SELECT 
+        useremail as resrcher_email
+        , username as resrcher_username
+        , userorg as resrcher_userorg
+        , usermajor as resrcher_usermajor
+        , userphone
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+      FROM rtrod.rtrod_user
+      WHERE username LIKE CONCAT('%' , #{is_ResrcherName}, '%')
+        AND useremail != #{is_UserEmail}
+  </select>
+
+  <select id="selectDataSourceList">
+      SELECT 
+        ds_code
+        , ds_dbname
+        , ds_holdorg
+        , ds_start_date
+        , ds_end_date
+        , ds_type
+        , rtrod.GET_SUB_CODENM(ds_type) AS ds_typenm
+        , ds_imagepath
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+      FROM rtrod.rtrod_datasource
+  </select>
+
+  <select id="selectSwtoolList">
+      SELECT 
+        swt_code
+        , swt_toolname
+        , swt_function
+        , swt_comments
+        , swt_imagepath
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+      FROM rtrod.rtrod_swtool
+  </select>
+
+  <insert id="insertProjectInfo"> 
+    INSERT INTO rtrod.rtrod_projects
+    (
+        pjt_code
+        , pjt_name
+        , pjt_owner
+        , pjt_owner_email
+        , pjt_type
+        , pjt_status
+        , pjt_start_date
+        , pjt_end_date
+        , pjt_field
+        , pjt_contents
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+    )
+    VALUES (
+        #{is_ProjectCd}
+        , #{is_Pjtname}
+        , #{is_Owner}
+        , #{is_Email}      
+        , #{is_TypeCheck}  
+        , #{is_Pjt_status}  
+        , CONCAT(#{is_Startday},'000000')  
+        , CONCAT(#{is_Endday},'235959')
+        , #{is_Resrch_field}  
+        , #{is_Resrch_contents} 
+        <choose>
+          <when test="is_Regdate != null and is_Regdate != '' ">
+            , #{is_Regdate}
+          </when>
+          <otherwise>
+            , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+          </otherwise>
+        </choose>
+        , #{is_Email}
+        , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+        , #{is_Email}
+    )
+  </insert>
+
+  <insert id="insertUseDataSourceList"> 
+    INSERT INTO rtrod.rtrod_use_datasource
+    (
+        uds_code
+        , uds_pjt_code
+        , uds_flag
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+    )
+    VALUES (
+        #{is_DsProjectCd}
+        , #{is_ProjectCd}
+        <choose>
+          <when test="is_DsProjectflag != null and is_DsProjectflag != '' ">
+            , #{is_DsProjectflag}
+          </when>
+          <otherwise>
+            , '/W'
+          </otherwise>
+        </choose>
+        <choose>
+          <when test="is_Regdate != null and is_Regdate != '' ">
+            , #{is_Regdate}
+          </when>
+          <otherwise>
+            , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+          </otherwise>
+        </choose>
+        , #{is_Email}
+        , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+        , #{is_Email}
+    )
+  </insert>
+
+  <insert id="insertUseSoftWareToolList"> 
+    INSERT INTO rtrod.rtrod_use_swtool
+    (
+          usw_code
+          , usw_pjt_code
+          , usw_flag
+          , reg_date
+          , reg_user
+          , update_date
+          , update_user
+    )
+    VALUES (
+          #{is_SwtoolCd}
+          , #{is_ProjectCd}
+          <choose>
+            <when test="is_SwtoolCdflag != null and is_SwtoolCdflag != '' ">
+              , #{is_SwtoolCdflag}
+            </when>
+            <otherwise>
+              , '/W'
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="is_Regdate != null and is_Regdate != '' ">
+              , #{is_Regdate}
+            </when>
+            <otherwise>
+              , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+            </otherwise>
+          </choose>
+          , #{is_Email}
+          , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+          , #{is_Email}
+    )
+  </insert>
+
+  <insert id="insertPtcipantInsertList"> 
+    INSERT INTO rtrod.rtrod_participant
+    (
+          ptc_code
+          , ptc_pjt_code
+          , ptc_username
+          , ptc_useremail
+          , ptc_flag
+          , reg_date
+          , reg_user
+          , update_date
+          , update_user
+    )
+    VALUES (
+          CONCAT('PT', DATE_FORMAT(now(), '%Y%m%d%H%i%s'))  
+          , #{is_ProjectCd}
+          , #{is_PtcipantName}
+          , #{is_PtcipantEmail}
+          <choose>
+            <when test="is_PtcipantFlag != null and is_PtcipantFlag != '' ">
+              , #{is_PtcipantFlag}
+            </when>
+            <otherwise>
+              , '/W'
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="is_Regdate != null and is_Regdate != '' ">
+              , #{is_Regdate}
+            </when>
+            <otherwise>
+              , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+            </otherwise>
+          </choose>
+          , #{is_Email}
+          , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+          , #{is_Email}
+    )
+  </insert>
+
+  <insert id="insertUploadFilenames"> 
+    INSERT INTO rtrod.rtrod_uploadfile
+    (
+          file_code
+          , file_pjt_code
+          , file_name
+          , file_path
+          , reg_date
+          , reg_user
+          , update_date
+          , update_user
+    )
+    VALUES (
+          CONCAT('UF', DATE_FORMAT(now(), '%Y%m%d%H%i%s'))  
+          , #{is_ProjectCd}
+          , #{is_Filename}
+          , '/uploads'
+          <choose>
+            <when test="is_Filedate != null and is_Filedate != '' ">
+              , #{is_Filedate}
+            </when>
+            <otherwise>
+              , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="is_Fileuser != null and is_Fileuser != '' ">
+              , #{is_Fileuser}
+            </when>
+            <otherwise>
+              , #{is_Email}
+            </otherwise>
+          </choose>
+          , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+          , #{is_Email}
+    )
+  </insert>
+
+  <delete id="deleteProjectInfo">
+    DELETE FROM rtrod.rtrod_projects
+    WHERE pjt_code = #{is_ProjectCd}
+  </delete>
+
+  <delete id="deleteDataSource">
+    DELETE FROM rtrod.rtrod_use_datasource
+    WHERE uds_pjt_code = #{is_ProjectCd}
+  </delete>
+
+  <delete id="deleteSWTool">
+    DELETE FROM rtrod.rtrod_use_swtool
+    WHERE usw_pjt_code = #{is_ProjectCd}
+  </delete>
+
+  <delete id="deleteParticipant">
+    DELETE FROM rtrod.rtrod_participant
+    WHERE ptc_pjt_code = #{is_ProjectCd}
+  </delete>
+
+  <delete id="deleteUploadFile">
+    DELETE FROM rtrod.rtrod_uploadfile
+    WHERE file_pjt_code = #{is_ProjectCd}
+  </delete>
+
+  <delete id="deleteParticipantinfo">
+    DELETE FROM rtrod.rtrod_participant
+    WHERE ptc_pjt_code = #{is_ProjectCd}
+    AND ptc_useremail = #{is_Email}
+  </delete>
+
+  <delete id="deletePostponeCode">
+    DELETE FROM rtrod.rtrod_delayperiod
+    WHERE delay_pjt_code = #{is_Pjt_code}
+  </delete>
+
+  <update id="updateReplyCode">
+    UPDATE rtrod.rtrod_reply
+    SET
+    reply_pjt_code = #{is_ProjectCd}
+		WHERE reply_pjt_code = #{is_before_ProjectCd}
+	</update>
+
+  <update id="updateDsApproval">
+    UPDATE rtrod.rtrod_use_datasource
+    SET
+    uds_flag = #{is_Uds_flag}
+		WHERE uds_code = #{is_Uds_code}
+    and uds_pjt_code = #{is_Uds_pjt_code}
+	</update>
+
+  <update id="updateSwApproval">
+    UPDATE rtrod.rtrod_use_swtool
+    SET
+    usw_flag = #{is_Usw_flag}
+		WHERE usw_code = #{is_Usw_code}
+    and usw_pjt_code = #{is_Usw_pjt_code}
+	</update>
+
+  <update id="updateSwtUpdateUrl">
+    UPDATE rtrod.rtrod_use_swtool A, rtrod.rtrod_use_swtool B
+    SET
+    A.usw_url = B.usw_url
+    WHERE A.usw_pjt_code = #{is_ProjectCd}
+    AND B.usw_pjt_code = #{is_BeforeProjectCd}
+    AND A.usw_code = B.usw_code
+	</update>
+
+  <update id="updatePostApproval">
+    UPDATE rtrod.rtrod_delayperiod
+    SET
+    delay_flag = #{is_Delay_flag}
+		WHERE delay_pjt_code = #{is_Pjt_code}
+	</update>
+
+  <update id="updateOriginPeriod">
+      UPDATE rtrod.rtrod_projects UP, rtrod.rtrod_delayperiod DP
+      SET   
+      UP.pjt_start_date = DP.delay_start_date
+      , UP.pjt_end_date = DP.delay_end_date
+      WHERE  UP.pjt_code = DP.delay_pjt_code
+      AND UP.pjt_code = #{is_Pjt_code}
+	</update>
+
+  <select id="selectPostponeperiod">
+    SELECT 
+      delay_code
+      , delay_pjt_code
+      , delay_start_date
+      , delay_end_date
+      , delay_flag
+    FROM rtrod.rtrod_delayperiod
+    <if test="is_Pjt_code != null && is_Pjt_code != ''">
+      WHERE delay_pjt_code = #{is_Pjt_code}
+    </if>
+  </select>
+
+  <insert id="insertPostponeperiod"> 
+    INSERT INTO rtrod.rtrod_delayperiod
+    (
+        delay_code
+        , delay_pjt_code
+        , delay_start_date
+        , delay_end_date
+        , delay_flag
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+    )
+    VALUES (
+        CONCAT('DP', DATE_FORMAT(now(), '%Y%m%d%H%i%s'))  
+        , #{is_Pjt_code}
+        , CONCAT(#{is_Startday},'000000')  
+        , CONCAT(#{is_Endday},'235959')
+        , '/W'
+        , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+        , #{is_Email}
+        , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+        , #{is_Email}
+    )
+  </insert>
+
+  <update id="updatePostponeCode">
+    UPDATE rtrod.rtrod_delayperiod
+    SET
+    delay_pjt_code = #{is_ProjectCd}
+    , update_date = DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+		WHERE delay_pjt_code = #{is_before_ProjectCd}
+	</update>
+
+  <update id="updatePjtStatus">
+    UPDATE rtrod.rtrod_projects
+    SET
+    pjt_status = #{is_Pjt_status}
+		WHERE pjt_code = #{is_Pjt_code}
+	</update>
+
+  <select id="selectMypjt2DayBeforeList">
+      SELECT 
+        pjt_code
+        , pjt_name
+        , pjt_owner_email
+        , pjt_status
+        , pjt_end_date
+      FROM rtrod.rtrod_projects
+      WHERE pjt_end_date-DATE_FORMAT(now(), '%Y%m%d%H%i%s') <![CDATA[<]]> 2235959
+        AND pjt_end_date-DATE_FORMAT(now(), '%Y%m%d%H%i%s')<![CDATA[>]]> 0
+        AND (pjt_status = 'RS1' OR pjt_status = 'RS2')
+  </select>
+
+</mapper>
+

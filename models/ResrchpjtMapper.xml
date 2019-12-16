@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ResrchpjtMapper">  
+  <select id="selectResrchpjtList">
+        <!-- 승인요청 or 공동연구자인 프로젝트 -->
+        (SELECT 
+          RP.pjt_code
+          , RP.pjt_name
+          , RP.pjt_owner
+          , RP.pjt_owner_email
+          , RP.pjt_type
+          , rtrod.GET_SUB_CODENM(pjt_status) AS pjt_status
+          , RP.pjt_status AS pjt_status_cd
+          , RP.pjt_start_date
+          , RP.pjt_end_date
+          , rtrod.GET_SUB_CODENM(pjt_field) AS pjt_field
+          , RP.pjt_field AS pjt_field_cd
+          , RP.pjt_contents
+          , rtrod.GET_ALL_PARTICIPANT(RP.pjt_code) as participtlist
+          , RP.reg_date
+          , RP.reg_user
+          , RP.update_date
+          , RP.update_user
+        FROM rtrod.rtrod_projects RP
+        INNER JOIN rtrod.rtrod_participant RPT
+        ON(RP.pjt_code = RPT.ptc_pjt_code)
+        WHERE 1=1
+        <if test="is_Owner_email2 != null && is_Owner_email2 != ''">
+          AND (
+            <choose>
+              <when test="is_Owner_email != null and is_Owner_email != '' ">
+                RPT.ptc_useremail = #{is_Owner_email2} AND ptc_flag in ('/A')
+              </when>
+              <otherwise>
+                RPT.ptc_useremail = #{is_Owner_email2} AND ptc_flag in ('/W', '/A')
+              </otherwise>
+            </choose>
+          )
+          AND RP.pjt_owner_email != #{is_Owner_email2}
+        </if>
+        <if test="is_ResrchFld != null && is_ResrchFld != ''">
+          AND pjt_field = #{is_ResrchFld}
+        </if>
+        <if test="is_ResrchState != null && is_ResrchState != ''">
+          AND pjt_status = #{is_ResrchState}
+        </if>
+        <if test="is_ProjectName != null && is_ProjectName != ''">
+          AND pjt_name LIKE CONCAT('%' ,#{is_ProjectName}, '%')
+        </if>
+        <if test="is_Pjt_status != null && is_Pjt_status != ''">
+          AND pjt_status = #{is_Pjt_status}
+        </if>
+        )
+      UNION
+      <!-- 책임 연구자인 프로젝트 -->
+        (SELECT 
+          RP.pjt_code
+          , RP.pjt_name
+          , RP.pjt_owner
+          , RP.pjt_owner_email
+          , RP.pjt_type
+          , rtrod.GET_SUB_CODENM(pjt_status) AS pjt_status
+          , RP.pjt_status AS pjt_status_cd
+          , RP.pjt_start_date
+          , RP.pjt_end_date
+          , rtrod.GET_SUB_CODENM(pjt_field) AS pjt_field
+          , RP.pjt_field AS pjt_field_cd
+          , RP.pjt_contents
+          , '**' as participtlist
+          , RP.reg_date
+          , RP.reg_user
+          , RP.update_date
+          , RP.update_user
+        FROM rtrod.rtrod_projects RP
+        WHERE 1=1
+        <choose>
+          <when test="is_Owner_email != null and is_Owner_email != '' ">
+            AND pjt_owner_email = #{is_Owner_email}
+          </when>
+          <otherwise>
+            <if test="is_Owner_email2 != null && is_Owner_email2 != ''">
+              AND (pjt_type = 'public' OR pjt_owner_email = #{is_Owner_email2})
+            </if>
+          </otherwise>
+        </choose>
+        <if test="is_ResrchFld != null && is_ResrchFld != ''">
+          AND pjt_field = #{is_ResrchFld}
+        </if>
+        <if test="is_ResrchState != null && is_ResrchState != ''">
+          AND pjt_status = #{is_ResrchState}
+        </if>
+        <if test="is_ProjectName != null && is_ProjectName != ''">
+          AND pjt_name LIKE CONCAT('%' ,#{is_ProjectName}, '%')
+        </if>
+        <if test="is_Pjt_status != null && is_Pjt_status != ''">
+          AND pjt_status = #{is_Pjt_status}
+        </if>
+          AND pjt_code NOT IN (
+              SELECT RP.pjt_code
+              FROM rtrod.rtrod_projects RP
+              INNER JOIN rtrod.rtrod_participant RPT
+              ON(RP.pjt_code = RPT.ptc_pjt_code)
+              WHERE 1=1
+              <if test="is_Owner_email2 != null && is_Owner_email2 != ''">
+                AND (
+                  <choose>
+                    <when test="is_Owner_email != null and is_Owner_email != '' ">
+                      RPT.ptc_useremail = #{is_Owner_email2} AND ptc_flag in ('/A')
+                    </when>
+                    <otherwise>
+                      RPT.ptc_useremail = #{is_Owner_email2} AND ptc_flag in ('/W', '/A')
+                    </otherwise>
+                  </choose>
+                )
+                AND RP.pjt_owner_email != #{is_Owner_email2}
+              </if>
+              <if test="is_ResrchFld != null && is_ResrchFld != ''">
+                AND pjt_field = #{is_ResrchFld}
+              </if>
+              <if test="is_ResrchState != null && is_ResrchState != ''">
+                AND pjt_status = #{is_ResrchState}
+              </if>
+              <if test="is_ProjectName != null && is_ProjectName != ''">
+                AND pjt_name LIKE CONCAT('%' ,#{is_ProjectName}, '%')
+              </if>
+              <if test="is_Pjt_status != null && is_Pjt_status != ''">
+                AND pjt_status = #{is_Pjt_status}
+              </if>
+          )
+        )
+      ORDER BY ${is_SortColumn}
+      <if test="startRow != null && startRow != '' && endRow != null && endRow != ''">
+        limit ${startRow}, ${endRow}
+      </if>
+  </select>
+
+  <select id="selectResrchpjtCount">
+      SELECT 
+        count(*) total_count
+      FROM
+      (
+        (SELECT RP.pjt_code  
+        FROM rtrod.rtrod_projects RP
+        INNER JOIN rtrod.rtrod_participant RPT
+        ON(RP.pjt_code = RPT.ptc_pjt_code)
+        WHERE 1=1
+        <if test="is_Owner_email2 != null && is_Owner_email2 != ''">
+          AND (
+            <choose>
+              <when test="is_Owner_email != null and is_Owner_email != '' ">
+                RPT.ptc_useremail = #{is_Owner_email2} AND ptc_flag in ('/A')
+              </when>
+              <otherwise>
+                RPT.ptc_useremail = #{is_Owner_email2} AND ptc_flag in ('/W', '/A')
+              </otherwise>
+            </choose>
+          )
+        </if>
+        <if test="is_ResrchFld != null && is_ResrchFld != ''">
+          AND pjt_field = #{is_ResrchFld}
+        </if>
+        <if test="is_ResrchState != null && is_ResrchState != ''">
+          AND pjt_status = #{is_ResrchState}
+        </if>
+        <if test="is_ProjectName != null && is_ProjectName != ''">
+          AND pjt_name LIKE CONCAT('%' ,#{is_ProjectName}, '%')
+        </if>
+        <if test="is_Pjt_status != null && is_Pjt_status != ''">
+          AND pjt_status = #{is_Pjt_status}
+        </if>
+        )
+      UNION
+        (SELECT RP.pjt_code  
+        FROM rtrod.rtrod_projects RP
+        WHERE 1=1
+        <choose>
+          <when test="is_Owner_email != null and is_Owner_email != '' ">
+            AND pjt_owner_email = #{is_Owner_email}
+          </when>
+          <otherwise>
+            <if test="is_Owner_email2 != null && is_Owner_email2 != ''">
+              AND (pjt_type = 'public' OR pjt_owner_email = #{is_Owner_email2})
+            </if>
+          </otherwise>
+        </choose>
+        <if test="is_ResrchFld != null && is_ResrchFld != ''">
+          AND pjt_field = #{is_ResrchFld}
+        </if>
+        <if test="is_ResrchState != null && is_ResrchState != ''">
+          AND pjt_status = #{is_ResrchState}
+        </if>
+        <if test="is_ProjectName != null && is_ProjectName != ''">
+          AND pjt_name LIKE CONCAT('%' ,#{is_ProjectName}, '%')
+        </if>
+        <if test="is_Pjt_status != null && is_Pjt_status != ''">
+          AND pjt_status = #{is_Pjt_status}
+        </if>
+          AND pjt_code NOT IN (
+              SELECT RP.pjt_code
+              FROM rtrod.rtrod_projects RP
+              INNER JOIN rtrod.rtrod_participant RPT
+              ON(RP.pjt_code = RPT.ptc_pjt_code)
+              WHERE 1=1
+              <if test="is_Owner_email2 != null && is_Owner_email2 != ''">
+                  AND (
+                    <choose>
+                      <when test="is_Owner_email != null and is_Owner_email != '' ">
+                        RPT.ptc_useremail = #{is_Owner_email2} AND ptc_flag in ('/A')
+                      </when>
+                      <otherwise>
+                        RPT.ptc_useremail = #{is_Owner_email2} AND ptc_flag in ('/W', '/A')
+                      </otherwise>
+                    </choose>
+                  )
+                AND RP.pjt_owner_email != #{is_Owner_email2}
+              </if>
+              <if test="is_ResrchFld != null && is_ResrchFld != ''">
+                AND pjt_field = #{is_ResrchFld}
+              </if>
+              <if test="is_ResrchState != null && is_ResrchState != ''">
+                AND pjt_status = #{is_ResrchState}
+              </if>
+              <if test="is_ProjectName != null && is_ProjectName != ''">
+                AND pjt_name LIKE CONCAT('%' ,#{is_ProjectName}, '%')
+              </if>
+              <if test="is_Pjt_status != null && is_Pjt_status != ''">
+                AND pjt_status = #{is_Pjt_status}
+              </if>
+          )
+        )
+      ) AS CNT 
+  </select>
+
+  <select id="selectResrchpjtInfo">
+      SELECT 
+        pjt_code
+        , pjt_name
+        , pjt_owner
+        , pjt_owner_email
+        , pjt_type
+        , rtrod.GET_SUB_CODENM(pjt_status) AS pjt_status
+        , pjt_status AS pjt_status_cd
+        , pjt_start_date
+        , pjt_end_date
+        , TO_DAYS(pjt_end_date) - TO_DAYS(now()) as pjt_ddday
+        , rtrod.GET_SUB_CODENM(pjt_field) AS pjt_field
+        , pjt_field AS pjt_field_cd
+        , pjt_contents
+        , rtrod.GET_ALL_PARTICIPANT(pjt_code) as participtlist
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+      FROM rtrod.rtrod_projects
+    <if test="is_Pjt_code != null && is_Pjt_code != ''">
+      WHERE pjt_code = #{is_Pjt_code}
+    </if>
+  </select>
+
+  <select id="selectParticipantInfo">
+      SELECT 
+        ptc_code
+        , ptc_pjt_code
+        , ptc_username
+        , ptc_useremail
+        , ptc_flag
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+      FROM rtrod.rtrod_participant
+    <if test="is_Pjt_code != null && is_Pjt_code != ''">
+      WHERE ptc_pjt_code = #{is_Pjt_code}
+    </if>
+  </select>
+  
+  <select id="selectDataSourceInfo">
+      SELECT 
+        DS.ds_dbname
+        , DS.ds_holdorg
+        , DS.ds_type
+        , rtrod.GET_SUB_CODENM(DS.ds_type) AS ds_typenm
+        , DS.ds_imagepath
+        , DS.ds_code
+        , UDS.uds_code
+        , UDS.uds_flag
+        , UDS.uds_pjt_code
+      FROM  rtrod.rtrod_use_datasource UDS
+      INNER JOIN rtrod.rtrod_datasource DS
+      ON(UDS.uds_code = DS.ds_code)
+     <if test="is_Pjt_code != null && is_Pjt_code != ''">
+      WHERE UDS.uds_pjt_code = #{is_Pjt_code}
+     </if>
+  </select>
+
+  <select id="selectSWtoolInfo">
+      SELECT 
+        SW.swt_code
+        , SW.swt_toolname
+        , SW.swt_function
+        , SW.swt_imagepath
+        , USW.usw_code
+        , USW.usw_flag
+        , USW.usw_pjt_code
+        , USW.usw_url
+	    FROM  rtrod.rtrod_use_swtool USW
+      INNER JOIN rtrod.rtrod_swtool SW
+      ON(USW.usw_code = SW.swt_code)
+     <if test="is_Pjt_code != null && is_Pjt_code != ''">
+      WHERE USW.usw_pjt_code = #{is_Pjt_code}
+     </if>
+  </select>
+
+  <select id="selectUploadFileInfo">
+      SELECT 
+        file_code
+        , file_pjt_code
+        , file_name
+        , file_path
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+	    FROM  rtrod.rtrod_uploadfile
+     <if test="is_Pjt_code != null && is_Pjt_code != ''">
+      WHERE file_pjt_code = #{is_Pjt_code}
+     </if>
+  </select>
+
+  <select id="selectReplyList">
+      SELECT 
+        RR.reply_code
+        , RR.reply_user_email
+        , RR.reply_pjt_code
+        , RR.reply_user_name
+        , RR.reply_contents
+        , RR.reg_date
+        , RR.reg_user
+        , RR.update_date
+        , RR.update_user
+      FROM rtrod.rtrod_reply RR
+      <if test="is_Pjt_code != null && is_Pjt_code != ''">
+	      WHERE RR.reply_pjt_code = #{is_Pjt_code}
+      </if>
+      ORDER BY RR.update_date DESC
+  </select>
+
+  <insert id="insertReplyinfo"> 
+    INSERT INTO rtrod.rtrod_reply
+    (
+        reply_code
+        , reply_user_email
+        , reply_pjt_code
+        , reply_user_name
+        , reply_contents
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+    )
+    VALUES (
+      CONCAT('RP' , DATE_FORMAT(now(), '%Y%m%d%H%i%s')) 
+      , #{is_Email}
+      , #{is_Pjt_code}
+      , #{is_Username}      
+      , #{is_reply_contents}      
+      , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+      , #{is_Email}
+      , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+      , #{is_Email}
+    )
+  </insert>
+
+  <delete id="deleteReplyinfo">
+    DELETE FROM rtrod.rtrod_reply
+    WHERE reply_code = #{is_Reply_code}
+  </delete>
+
+  <update id="updatePartiStatus">
+      UPDATE rtrod.rtrod_participant
+      SET
+      ptc_flag = #{is_PtcFlag}
+		WHERE ptc_pjt_code = #{is_Pjt_code}
+    AND ptc_useremail = #{is_Email}
+	</update>
+
+</mapper>
+

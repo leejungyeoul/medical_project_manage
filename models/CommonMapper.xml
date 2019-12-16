@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CommonMapper">  
+  <select id="selectSubcode">
+      SELECT CM.code_cd as mst_code_cd
+        , CM.code_nm as mst_code_nm
+        , CS.code_cd
+        , CS.code_nm
+      FROM rtrod.rtrod_code_mst CM
+      INNER JOIN rtrod.rtrod_code_sub CS
+      ON(CM.code_cd = CS.code_mst_cd)
+      WHERE 1=1
+    <if test="is_Subcode != null && is_Subcode != ''">
+      AND CM.code_cd = #{is_Subcode}
+    </if>
+    <if test="is_Code != null && is_Code != ''">
+      AND (
+        CM.code_cd = #{is_Code}
+        OR CM.code_nm LIKE CONCAT('%' ,#{is_Code}, '%')
+        OR CS.code_cd = #{is_Code}
+        OR CS.code_nm LIKE CONCAT('%' ,#{is_Code}, '%')
+      )
+    </if>
+  </select>
+
+  <select id="selectMstcode">
+      SELECT CM.code_cd as mst_code_cd
+        , CM.code_nm as mst_code_nm
+      FROM rtrod.rtrod_code_mst CM
+  </select>
+
+  <select id="selectSubcode2">
+      SELECT count(code_cd) as num
+      FROM rtrod.rtrod_code_sub CS
+      WHERE code_cd = #{is_Subcode}
+  </select>
+
+  <insert id="insertMstCode"> 
+    INSERT INTO
+      rtrod.rtrod_code_mst (
+        code_cd,
+        code_nm,
+        reg_date,
+        reg_user,
+        update_date,
+        update_user
+      )
+    SELECT 
+        #{is_Mst_code_cd}
+        , #{is_Mst_code_nm}
+        , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+        , #{is_User_email}
+        , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+        , #{is_User_email}
+        FROM DUAL
+        WHERE NOT EXISTS ( SELECT * FROM rtrod_code_mst WHERE code_cd = #{is_Mst_code_cd});
+  </insert>
+
+  <insert id="insertSubCode"> 
+    INSERT INTO rtrod.rtrod_code_sub
+    (
+        code_cd
+        , code_mst_cd
+        , code_nm
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+    )
+    VALUES (
+        #{is_Code_cd}
+        , #{is_Mst_code_cd}
+        , #{is_Code_nm}
+        , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+        , #{is_User_email}
+        , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+        , #{is_User_email}
+    )
+  </insert>
+
+  <update id="updateMstCode"> 
+    UPDATE rtrod.rtrod_code_mst a, rtrod.rtrod_code_mst b
+    SET
+    a.code_nm = #{is_Mst_code_nm}
+    , a.reg_date = b.reg_date
+    , a.reg_user = b.reg_user
+    , a.update_date = DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+    , a.update_user = #{is_User_email}
+    WHERE a.code_cd = #{is_Mst_code_cd}
+    and b.code_cd = #{is_Mst_code_cd}
+  </update>
+
+  <update id="updateSubCode"> 
+    UPDATE rtrod.rtrod_code_sub a, rtrod.rtrod_code_sub b
+    SET
+    a.code_nm = #{is_Code_nm}
+    , a.code_mst_cd = #{is_Mst_code_cd}
+    , a.reg_date = b.reg_date
+    , a.reg_user = b.reg_user
+    , a.update_date = DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+    , a.update_user = #{is_User_email}
+    WHERE a.code_cd = #{is_Code_cd}
+    and b.code_cd = #{is_Code_cd}
+  </update>
+
+  <delete id="deleteMstCode">
+    DELETE FROM rtrod.rtrod_code_mst
+    WHERE code_cd = #{is_Mst_code_cd}
+    AND NOT EXISTS (SELECT * FROM  rtrod.rtrod_code_sub b
+    WHERE b.code_mst_cd = #{is_Mst_code_cd})
+  </delete>
+
+  <delete id="deleteSubCode">
+    DELETE FROM rtrod.rtrod_code_sub
+    WHERE code_cd = #{is_Code_cd}
+  </delete>
+
+  <select id="selectSystem">
+      SELECT email_ym
+      FROM rtrod.rtrod_system
+  </select>
+
+  <select id="selectfilelist">
+      SELECT file_name
+      FROM rtrod.rtrod_uploadfile
+  </select>
+
+  <update id="updateFinishedPjtList">
+      UPDATE rtrod.rtrod_projects
+      SET   
+      pjt_status = 'RS3'
+      , batch_time = DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+      WHERE pjt_end_date <![CDATA[<]]> DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+      AND pjt_status <![CDATA[<>]]> 'RS3'
+	</update>
+
+  <select id="selectFinishedPjtList">
+      SELECT
+          pjt_code
+        , pjt_name
+        , pjt_owner
+        , pjt_owner_email
+        , pjt_type
+        , pjt_status
+        , pjt_start_date
+        , pjt_end_date
+        , rtrod.GET_SUB_CODENM(pjt_field) AS pjt_field
+        , pjt_field AS pjt_field_cd
+        , pjt_contents
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+      FROM rtrod.rtrod_projects
+      WHERE (DATE_FORMAT(now(), '%Y%m%d%H%i%s') - batch_time) <![CDATA[<=]]> 500
+      AND pjt_status = 'RS3'
+  </select>
+
+  <insert id="insertBatchlog"> 
+    INSERT INTO rtrod.rtrod_batch_log
+    (
+        batch_cd
+        , batch_nm
+        , batch_log
+        , reg_date
+    )
+    VALUES (
+        #{is_Batchcode}
+        , #{is_Batchnm}
+        , <![CDATA[#{is_Batchlog}]]> 
+        , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+    )
+  </insert>
+
+  <insert id="insertLogInfo"> 
+    INSERT INTO rtrod.rtrod_log_info
+    (
+        log_cd
+        , log_contents
+        , reg_usernm
+        , reg_user
+        , reg_date
+    )
+    VALUES (
+        #{is_Log_cd}
+        , #{is_Log_contents}
+        , #{is_Reg_usernm}
+        , #{is_Reg_user}
+        , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+    )
+  </insert>
+</mapper>
+

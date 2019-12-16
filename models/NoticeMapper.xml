@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="NoticeMapper">  
+  <select id="selectNoticeList">
+      SELECT 
+        nt_cd
+        , nt_title
+        , nt_description
+        , nt_view
+        , reg_date
+        , reg_user
+        , reg_user_email
+        , update_date
+        , update_user
+        , update_user_email
+        
+      FROM rtrod.rtrod_notice
+  </select>
+
+  <select id="selectNoticeDetail">
+      SELECT 
+        nt_cd
+        , nt_title
+        , nt_description
+        , nt_view
+        , reg_date
+        , reg_user
+        , reg_user_email
+        , update_date
+        , update_user
+        , update_user_email
+      FROM rtrod.rtrod_notice
+      <if test="is_Notice_code != null && is_Notice_code != ''">
+        WHERE nt_cd = #{is_Notice_code}
+      </if>
+  </select>
+
+  <insert id="insertNoticeDetail"> 
+    INSERT INTO rtrod.rtrod_notice
+    (
+        nt_cd
+        , nt_title
+        , nt_description
+        , nt_view
+        , reg_date
+        , reg_user
+        
+
+    )
+    VALUES (
+        #{is_NtCd}
+        , #{is_NtTitle}
+        , #{is_NtDesc}
+        , #{is_NtView}
+        , reg_date = DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+        , #{is_RegUser}
+
+        
+    )
+  </insert>
+  
+
+</mapper>
+

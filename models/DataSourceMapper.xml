@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DataSourceMapper">  
+  <select id="selectDataSourceList">
+      SELECT 
+        ds_code
+        , ds_dbname
+        , ds_type
+        , rtrod.GET_SUB_CODENM(ds_type) AS ds_typenm
+        , ds_cdm_version
+        , ds_holdorg
+        , ds_start_date
+        , ds_end_date
+        , ds_patnt_count
+        , ds_db_location
+        , ds_data_type
+        , ds_imagepath
+        , ds_big_imgpath
+        , ds_comments
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+      FROM rtrod.rtrod_datasource
+      ORDER BY update_date DESC
+      <if test="startRow != null && startRow != ''">
+        limit ${startRow}, ${endRow}
+      </if>
+  </select>
+
+  <select id="selectDataSourceInfo">
+      SELECT 
+        ds_code
+        , ds_dbname
+        , ds_type
+        , rtrod.GET_SUB_CODENM(ds_type) AS ds_typenm
+        , ds_cdm_version
+        , ds_holdorg
+        , ds_start_date
+        , ds_end_date
+        , ds_patnt_count
+        , ds_db_location
+        , ds_data_type
+        , ds_imagepath
+        , ds_big_imgpath
+        , ds_comments
+        , reg_date
+        , reg_user
+        , update_date
+        , update_user
+      FROM rtrod.rtrod_datasource
+      <if test="is_Dscode != null && is_Dscode != ''">
+        WHERE ds_code = #{is_Dscode}
+      </if>
+  </select>
+
+  <select id="selectDataSourceListCount">
+      SELECT 
+        count(*) total_count
+      FROM rtrod.rtrod_datasource
+  </select>
+
+  <insert id="insertDataSourceInfo"> 
+    INSERT INTO rtrod.rtrod_datasource
+    (
+      ds_code
+      , ds_dbname
+      , ds_type
+      , ds_cdm_version
+      , ds_holdorg
+      , ds_start_date
+      , ds_end_date
+      <if test="is_Ds_patnt_count != null && is_Ds_patnt_count != ''">
+        , ds_patnt_count
+      </if>
+      <if test="is_Ds_db_location != null && is_Ds_db_location != ''">
+        , ds_db_location
+      </if>
+      <if test="is_Ds_db_type != null && is_Ds_db_type != ''">
+        , ds_data_type
+      </if>
+      <if test="is_LabelImg != null && is_LabelImg != ''">
+        , ds_imagepath
+      </if>
+      <if test="is_MainImg != null && is_MainImg != ''">
+        , ds_big_imgpath
+      </if>
+      , ds_comments
+      , reg_date
+      , reg_user
+      , update_date
+      , update_user
+    )
+    VALUES (
+      #{is_Dscode}
+      , #{is_Ds_dbname}
+      , #{is_Ds_typecd}      
+      , #{is_Ds_cdm_version}
+      , #{is_Ds_holdorg}
+      , CONCAT(#{is_Startday},'000000')  
+      , CONCAT(#{is_Endday},'235959')
+      <if test="is_Ds_patnt_count != null && is_Ds_patnt_count != ''">
+        , #{is_Ds_patnt_count}
+      </if>
+      <if test="is_Ds_db_location != null && is_Ds_db_location != ''">
+        , #{is_Ds_db_location}
+      </if>
+      <if test="is_Ds_db_type != null && is_Ds_db_type != ''">
+        , #{is_Ds_db_type}
+      </if>
+      <if test="is_LabelImg != null && is_LabelImg != ''">
+        , #{is_LabelImg}
+      </if>
+      <if test="is_MainImg != null && is_MainImg != ''">
+        , #{is_MainImg}
+      </if>
+      , #{is_Ds_comments}
+      , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+      , #{is_Email}
+      , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+      , #{is_Email}
+    )
+  </insert>
+
+  <update id="updateDataSourceInfo"> 
+    UPDATE rtrod.rtrod_datasource
+    SET
+      ds_dbname = #{is_Ds_dbname}
+      , ds_type = #{is_Ds_typecd}
+      , ds_cdm_version = #{is_Ds_cdm_version}
+      , ds_holdorg = #{is_Ds_holdorg}
+      , ds_start_date = CONCAT(#{is_Startday},'000000')  
+      , ds_end_date = CONCAT(#{is_Endday},'235959')
+      <if test="is_Ds_patnt_count != null && is_Ds_patnt_count != ''">
+        , ds_patnt_count = #{is_Ds_patnt_count}
+      </if>
+      <if test="is_Ds_db_location != null && is_Ds_db_location != ''">
+        , ds_db_location = #{is_Ds_db_location}
+      </if>
+      <if test="is_Ds_db_type != null && is_Ds_db_type != ''">
+        , ds_data_type = #{is_Ds_db_type}
+      </if>
+      <if test="is_LabelImg != null && is_LabelImg != ''">
+        , ds_imagepath = #{is_LabelImg}
+      </if>
+      <if test="is_MainImg != null && is_MainImg != ''">
+        , ds_big_imgpath = #{is_MainImg}
+      </if>
+      , ds_comments = #{is_Ds_comments}
+      , update_date = DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+      , update_user = #{is_Email}
+    WHERE ds_code = #{is_beforeDscode}
+  </insert>
+
+  <delete id="deleteDataSourceInfo">
+    DELETE FROM rtrod.rtrod_datasource
+    WHERE ds_code = #{is_DsCd}
+  </delete>
+
+</mapper>
+
