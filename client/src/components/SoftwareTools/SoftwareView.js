@@ -10,8 +10,8 @@ class SoftwareView extends Component {
             responseSwtoolInfo: '',//swtool 정보 response 변수
             append_SwtoolInfo: '', //swtool 정보 append 변수
 
-            responseSwFuncList: '',//swtool 정보 response 변수
-            append_SwFuncList: '', //swtool 정보 append 변수
+            responseSwFuncList: '',//swtool 기능 정보 response 변수
+            append_SwFuncList: '', //swtool 기능 정보 append 변수
 
             swtcode: props.match.params.swtcode, //swtool 정보 swtool 코드
             swt_toolname: '', //swtool 정보 swt_toolname

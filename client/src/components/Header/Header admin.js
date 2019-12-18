@@ -4,8 +4,6 @@ import cookie from 'react-cookies';
 import 'react-app-polyfill/ie11';
 import axios from "axios";
 import Swal from 'sweetalert2'
-
-// jQuery
 import $ from 'jquery';
 
 class Header extends Component {
@@ -62,17 +60,9 @@ class Header extends Component {
         $('.gn_2').stop().slideDown(300);
     };
 
+    // 커뮤니티 탭 드롭다운 이벤트
     mouseLeave () {
         $('.gn_2').stop().slideUp(300);
-    };
-
-    // 사이트맵 클릭 이벤트
-    sitemapClick () {
-        $('.pop_layout').fadeIn();
-		$("html").css("overflow","hidden");
-		$("body").css("overflow","hidden");
-		$('.pop_cnt').hide();
-		$('.pop_sitemap').show();
     };
 
     // 내 정보 영역 마우스 hover 이벤트
@@ -80,6 +70,7 @@ class Header extends Component {
         $(".hd_left > li > .box1").stop().fadeIn(400);
     }
     
+    // 내 정보 영역 마우스 leave 이벤트
     myInfoLeave () {
         $(".hd_left > li > .box1").stop().fadeOut(400);
     }
@@ -89,9 +80,11 @@ class Header extends Component {
         this.callNoticeApi('display')
     }
 
+    // 알림 영역 마우스 hover 이벤트
     alarmLeave () {
         $(".hd_left > li > .box0").stop().fadeOut(400);
     }
+
     //로그아웃 아이디 세션 정보 삭제
     logout = async e => {
         cookie.remove('userid', { path: '/'});
@@ -261,7 +254,7 @@ class Header extends Component {
                         {/* 드롭다운 이벤트 */}
                         <li onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} ><Link to={'/community/notice'}>Community 관리</Link>
                         <ul className="gn_2">
-                            <li onClick={(e) => this.exceptpage(e)}><Link to={'/community/notice'}>공지사항</Link></li>
+                            <li><Link to={'/community/notice'}>공지사항</Link></li>
                         </ul>
                         </li>
                         <li>

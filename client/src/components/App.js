@@ -54,14 +54,6 @@ import NoticeView from './Community/Notice/NoticeView';
 import NoticeWrite from "./Community/Notice/NoticeWrite";
 import NoticeModify from "./Community/Notice/NoticeModify";
 
-// QnA
-import QnA from './Community/QnA/QnA';
-import QnAView from './Community/QnA/QnAView';
-import QnAAnswer from './Community/QnA/QnAAnswer';
-
-// temp_code
-import Api_test from './Api_test'
-
 // ADMIN
 import UserApproval from './UserManage/UserApproval';
 import AdminResearchProject from './ProjectManage/AdminResearchProject';
@@ -73,18 +65,11 @@ import AdminDataSourceList from './DataSourcesManage/AdminDataSourceList';
 import AdminDataSourceView from './DataSourcesManage/AdminDataSourceView';
 import SubCodeManage from './SubCodeManage/SubCodeManageView';
 
-
-/*
-  수정이 필요한 사항 (console에서 validateDOMNesting error 뜨는 것)
-  => input tag value 관련 handler 및 state 설정 필요
-*/
-
 class App extends Component {
   constructor (props) {
     super(props);
     
     this.state = {
-
         //세션 처리
         usernm:'', //사용자 이름
         userid:'', //사용자 아이디
@@ -93,6 +78,7 @@ class App extends Component {
 
   componentDidMount() {
     
+      // 비밀번호 재설정 패이지를 제외하고, 세션이 유효하지 않으면 home url로 이동.
       if(window.location.pathname.indexOf('/PwChangeForm') == -1){
 
         var home_url = ''
@@ -100,7 +86,8 @@ class App extends Component {
         .then(function (response) {
           home_url = response.data.home_url;
         })   
-  
+        
+        //쿠키에서 userid, username을 가져와 복호화한다.
         axios.post('/api/LoginForm?type=SessionConfirm', {
           token1 : cookie.load('userid') 
           , token2 : cookie.load('username') 
@@ -130,6 +117,7 @@ class App extends Component {
                   }
                 }
               }else{
+                // 계정정보가 유효하지 않다면 세션값 삭제후, 홈으로 이동
                 if(window.location.hash != 'nocookie'){
                   this.remove_cookie()
                   window.location.href = home_url+'/nocookie/#nocookie'
@@ -207,11 +195,6 @@ class App extends Component {
             <Route path="/community/notice/write/:flag" component={NoticeWrite} />
             <Route path="/community/noticeModify/:flag" component={NoticeModify} />
 
-            <Route path='/community/QnA' component={QnA} />
-            <Route path='/community/QnA-view/' component={QnAView} />
-            <Route path='/community/QnA-answer' component={QnAAnswer} />
-            {/* temp_code */}
-            <Route path='/Api_test' component={Api_test} />
             {/* admin */}
             <Route path='/UserApproval' component={UserApproval} />
             <Route path='/AdminResearchProject' component={AdminResearchProject} />

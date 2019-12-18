@@ -1,17 +1,8 @@
-
-/*
-    파일첨부에 대한 function 구현이 필요함
-    댓글에 대한 function 구현이 필요함
-    공동연구자 참여 취소에 대한 처리 프로세스가 필요함
-    공동연구자 참여 승인/반려에 대한 팝업 처리시 프로세스가 필요함
- */
-
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import axios from "axios";
 import cookie from 'react-cookies';
 import Swal from 'sweetalert2'
-
 import $ from 'jquery';
 
 class AdminMyProjectDetail extends Component {
@@ -21,10 +12,10 @@ class AdminMyProjectDetail extends Component {
         this.state = {
             isCo_researcher: false,     // 해당 프로젝트에서 공동연구자인 경우
             isResp_researcher: true,    // 해당 프로젝트에서 책임연구자인 경우
-            pjtcode: props.match.params.pjtcode,
+            pjtcode: props.match.params.pjtcode, // 리스트에서 선택한 프로젝트 코드
 
-            ownerRsrcher: '',
-            ownerRsrcherEmail: '',
+            ownerRsrcher: '', // 책임연구자
+            ownerRsrcherEmail: '', // 책임연구자 이메일
 
             responseProjectInfo: '',//project 정보 response 변수
             append_PjtInfo: '',     //project 정보 append 변수
@@ -43,29 +34,23 @@ class AdminMyProjectDetail extends Component {
             path: '', //연구 파일 다운로드 경로
 
             //공동연구자 승인 팝업변수
-            pjt_name: '',
-            pjt_period: '',
+            pjt_name: '', // 프로젝트명
+            pjt_period: '', //프로젝트 기간
             prtipant_flag: '/W',
 
             //공동연구자 파일 업로드
-            append_fileform:'',            
-            file_result: [],
+            append_fileform:'', // 파일 폼     
+            file_result: [], // 파일 폼 결과
             selectedFile: null, //업로드 대상 파일
-            file_idx: 0,
+            file_idx: 0, // 파일 인덱스
             responseUploadfileInfo: '',//Uploadfile 정보 response 변수
             append_UploadfileInfo: '', //Uploadfile 정보 append 변수
-            uploadFileName:[],
-            uploadFileRegdate:[],
-            uploadFileReguser:[],
-            deleteMapperList:['deleteUploadFile'],
 
             //연장 연구기간
-            startday:'',
-            endday:'',
-            delay_flag:'',
+            startday:'', // 시작일자
+            endday:'',   // 종료일자
+            delay_flag:'', // 승인 여부
 
-            //메시지 전송변수
-            pjt_owner:'',
             //관리자 세션 처리
             admin_usernm:'', //관리자 이름
             admin_userid:'', //관리자 아이디

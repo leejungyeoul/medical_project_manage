@@ -20,8 +20,8 @@ class AdminResearchProject extends Component {
             responseProjectList: '',//project 리스트 response 변수
             append_PjtList: '',     //project 리스트 append 변수
 
-            temp_name: '',
-            my_project_Flag: false,
+            temp_name: '', // 연구분야, 연구상태 명칭 변수
+            my_project_Flag: false, // 나의 프로젝트 버튼 선택 여부
 
             //검색용 변수
             ResrchFld_check: '',   //선택한 연구분야 변수
@@ -30,7 +30,7 @@ class AdminResearchProject extends Component {
 
             //정렬용 변수
             sort_column:'update_date DESC',//정렬 컬럼 변수
-            before_sort: '',
+            before_sort: '',// 정렬 결과 호출시 target 변수
 
             //페이징 변수
             total_size: 0, //전체 데이터
@@ -42,8 +42,8 @@ class AdminResearchProject extends Component {
             endPage: 0, //페이징 마지막
             nowPage: 1, //현재 페이지
             page_size: 5, //페이지수 << 1 2 3 4 5 >>
-            append_paging:'',
-            lastpage_Flag: false,
+            append_paging:'', // 페이징 폼
+            lastpage_Flag: false, // 마지막 페이지 여부
             small_flag: false, //페이지 사이즈보다 데이터 크기가 더 작은경우
         }
     }

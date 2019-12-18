@@ -24,7 +24,7 @@ class UserApproval extends Component {
             
             //정렬용 변수
             sort_column:'FIELD(userflag, \'Y\', \'N\') DESC, reg_date DESC' , //정렬 컬럼 변수
-            before_sort: '',
+            before_sort: '', // 이전 정렬 타겟 변수
             
             //페이징 변수
             total_size: 0, //전체 데이터
@@ -36,8 +36,8 @@ class UserApproval extends Component {
             endPage: 0, //페이징 마지막
             nowPage: 1, //현재 페이지
             page_size: 2, //페이지수 << 1 2 3 4 5 >>
-            append_paging:'',
-            lastpage_Flag: false,
+            append_paging:'', // 페이징 폼
+            lastpage_Flag: false, // 마지막 페이지 여부
             small_flag: false, //페이지 사이즈보다 데이터 크기가 더 작은경우
 
             responseProjectList: '',//project 리스트 response 변수
@@ -48,11 +48,10 @@ class UserApproval extends Component {
     }
 
     componentDidMount() {
+        // 세션 처리
         this.callSessionInfoApi()
         // 사용자 리스트 호출
         this.callUserListApi('', '')
-
-
     }
     
     // 쿠키값 userid, username 호출
@@ -379,39 +378,39 @@ class UserApproval extends Component {
         $("body").css("overflow","hidden");
     }
 
-        // 프로젝트 리스트 append
-        ResrchpjtListAppend = () => {
-            let result = []
-            var ResearchPjtlist = this.state.responseProjectList.data
-    
-            for(let i=0; i<ResearchPjtlist.json.length; i++){
+    // 프로젝트 리스트 append
+    ResrchpjtListAppend = () => {
+        let result = []
+        var ResearchPjtlist = this.state.responseProjectList.data
 
-                var date = ResearchPjtlist.json[i].pjt_start_date
-                var year = date.substr(0,4)
-                var month = date.substr(4,2)
-                var day = date.substr(6,2)
-                var pjt_startdate = year +'.'+month+'.'+day
-    
-                date = ResearchPjtlist.json[i].pjt_end_date
-                year = date.substr(0,4)
-                month = date.substr(4,2)
-                day = date.substr(6,2)
-                var pjt_enddate = year +'.'+month+'.'+day
+        for(let i=0; i<ResearchPjtlist.json.length; i++){
 
-                result.push(
-                    <tr>
-                        <td>{ResearchPjtlist.json[i].pjt_name}</td>
-                        <td>{ResearchPjtlist.json[i].pjt_name}</td>
-                        <td>
-                            <p>{pjt_startdate}</p>
-                            <p>{pjt_enddate}</p>
-                        </td>
-                        <td>{ResearchPjtlist.json[i].pjt_status}</td>
-                    </tr>
-                )
-            }
-            return result
+            var date = ResearchPjtlist.json[i].pjt_start_date
+            var year = date.substr(0,4)
+            var month = date.substr(4,2)
+            var day = date.substr(6,2)
+            var pjt_startdate = year +'.'+month+'.'+day
+
+            date = ResearchPjtlist.json[i].pjt_end_date
+            year = date.substr(0,4)
+            month = date.substr(4,2)
+            day = date.substr(6,2)
+            var pjt_enddate = year +'.'+month+'.'+day
+
+            result.push(
+                <tr>
+                    <td>{ResearchPjtlist.json[i].pjt_name}</td>
+                    <td>{ResearchPjtlist.json[i].pjt_name}</td>
+                    <td>
+                        <p>{pjt_startdate}</p>
+                        <p>{pjt_enddate}</p>
+                    </td>
+                    <td>{ResearchPjtlist.json[i].pjt_status}</td>
+                </tr>
+            )
         }
+        return result
+    }
 
     //alert 기본 함수
     sweetalert = (title, contents, icon, confirmButtonText) => {

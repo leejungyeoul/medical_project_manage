@@ -187,24 +187,5 @@
     WHERE userflag = 'M'
   </select>
 
-  <insert id="insertSessionToken"> 
-    INSERT INTO rtrod.rtrod_sesstion_status
-    (
-      user_id
-      , token
-      , reg_date
-    )
-    VALUES (
-      #{is_Email}
-      , #{is_Token}
-      , DATE_FORMAT(now(), '%Y%m%d%H%i%s')
-      )
-  </insert>
-
-  <delete id="deleteSessionToken">
-    DELETE FROM rtrod.rtrod_sesstion_status
-    WHERE token = #{is_Token}
-  </delete>
-
 </mapper>
 

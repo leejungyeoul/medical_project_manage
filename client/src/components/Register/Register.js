@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from "axios";
 import cookie from 'react-cookies';
 import Swal from 'sweetalert2'
-
-// jQuery
 import $ from 'jquery';
 
 class Register extends Component {
@@ -12,13 +9,9 @@ class Register extends Component {
         super(props);
         
         this.state = {
-            email_val_checker: '',  
-            pwd_val_checker: '',
-            pwd_cnf_val_checker: '',
-            name_val_checker: '',
-            email2_val_selected: '',
-            full_email:'',
-            full_email2:'',
+            email2_val_selected: '', // 선택된 이메일 뒷주소
+            full_email:'', // 등록용 이메일주소
+            full_email2:'', // 수정용 이메일주소
 
             //세션 처리
             usernm:'', //사용자 이름
@@ -65,6 +58,7 @@ class Register extends Component {
 
                     $('#drct_email2_val').val(splitemail[1])
                     if(splitemail[1] !== undefined){
+                        // 이메일 뒤 주소 직접입력일 경우
                         if(splitemail[1].indexOf('naver.com/hanmail.net/nate.com/hotmail.com/gmail.com/yahoo.co.kr/yahoo.com') == -1){
                             $('.email2_class').attr('disabled', false);
                             $('#email2_val').val('1')
@@ -375,19 +369,22 @@ class Register extends Component {
         cookie.remove('userpassword', { path: '/'});
     }
 
-    // input tag 내에서 keypress event
+    // 이메일 keypress
     emailKeyPress = (e) => {
         $('#email_val').removeClass('border_validate_err');
     };
 
+    // 비밀번호 keypress
     pwdKeyPress = (e) => {
         $('#pwd_val').removeClass('border_validate_err');
     };
 
+    // 비밀번호 확인 keypress
     pwdCnfKeyPress = (e) => {
         $('#pwd_cnf_val').removeClass('border_validate_err');
     };
 
+    // 이름 keypress
     nameKeyPress = (e) => {
         $('#name_val').removeClass('border_validate_err');
     };
@@ -437,7 +434,6 @@ class Register extends Component {
           })
     }
 
-    // ### render start ###
     render () {
         return (
             <div>

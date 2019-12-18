@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import $ from 'jquery';
-
-// const Footer = (props) => {
 
 class Footer extends Component {
     constructor (props) {
@@ -49,8 +46,6 @@ class Footer extends Component {
               {/* <span>Mobile : {props.footer_mobile}</span> */}
             </div>
             <p>COPYRIGHT &copy; 2019 RT-ROD, ALL RIGHTS RESERVED.{this.props.name}</p>
-            {/* temp_code */}
-            {/* <Link to={'/Api_test'}>Api_test</Link> */}
         </footer>
     );
   }

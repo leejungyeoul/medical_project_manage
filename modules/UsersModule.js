@@ -21,33 +21,6 @@ var ip = require('ip');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-
-/**
-* @Auther : 이정열
-* @Date   : 2019.08.20
-* @Method_Comment : 로그인
-* @Param : 
-* @return : 사용자 정보
-*/
-router.get('/', function(req, res, next){
-  var m_typ = req.query.type;
-
-  if(m_typ == "login"){
-    res.send({ express: 'get Module Data From Express || param.type = ' + req.query.type});
-    // res.send({ express: req.params+' get Data From Express '+req.params.id+"  "+req.params.a });
-    // console.log(res)
-  }
-
-});
-
-
-/**
-* @Auther : 이정열
-* @Date   : 2019.08.20
-* @Method_Comment : 로그인 사용자 정보 조회
-* @Param : type(login, logout) 
-* @return : 사용자 정보
-*/
 router.post('/', (req, res, next) => {
   var m_typ = req.query.type;
   //로그인 정보 조회
@@ -69,6 +42,7 @@ router.post('/', (req, res, next) => {
   }
 
   if(m_typ == "adminlist"){
+    // 관리자 리스트 조회
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -85,8 +59,8 @@ router.post('/', (req, res, next) => {
     }
   }
 
-  //회원가입 정보 삽입
   if(m_typ == "signup"){
+    //회원가입 정보 삽입
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -119,8 +93,8 @@ router.post('/', (req, res, next) => {
     }
   }
   
-  //나의 정보 수정
   if(m_typ == "modify"){
+    //나의 정보 수정
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -178,10 +152,8 @@ router.post('/', (req, res, next) => {
     }
   }
 
-
-
-  //이메일 중복체크
   if(m_typ == "dplicheck"){
+    //이메일 중복체크
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -197,8 +169,8 @@ router.post('/', (req, res, next) => {
     }
   }
 
-  //로그인 조회
   if(m_typ == "signin" || m_typ =="modinfo"){
+    //로그인 조회
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -215,6 +187,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == "pwreset"){
+    //비밀번호 재설정시 이메일과 이름으로 사용자 식별
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -231,6 +204,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == "pwemail"){
+    // 이메일 인증 후 사용자 인증 
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -264,7 +238,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == "ApprovalCount"){
-    //사용자 승인/삭제
+    //사용자 목록 count 조회
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -295,6 +269,7 @@ router.post('/', (req, res, next) => {
     }
   }
   if(m_typ == "SessionState"){
+    //이메일, 사용자명 비밀키로 암호화 (쿠키값으로 사용)
     var userid = req.body.is_Email
     var name = req.body.is_UserName
 
@@ -324,6 +299,7 @@ router.post('/', (req, res, next) => {
       res.send(error)
     }
   }else if(m_typ == "SessionConfirm"){
+    // 쿠키값 이메일, 사용자명 복호화
     try {
       let token1 = req.body.token1;
       let token2 = req.body.token2;
@@ -348,22 +324,6 @@ router.post('/', (req, res, next) => {
       res.redirect(home_url);
     }
 
-  }else if(m_typ == "Session"){
-
-    //사용자 목록 조회
-    try {
-      // Mysql Api 모듈(CRUD)
-      var dbconnect_Module = require('./dbconnect_Module');
-  
-      //Mysql 쿼리 호출정보 입력
-      req.body.mapper = 'UserMapper';//mybatis xml 파일명
-      req.body.crud = 'insert';//select, insert, update, delete 중에 입력
-      req.body.mapper_id = 'insertSessionToken';
-      router.use('/', dbconnect_Module);
-      next('route')
-    } catch (error) {
-      console.log("Module > dbconnect error : "+ error);      
-    }
   }
 
 });

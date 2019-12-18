@@ -17,15 +17,6 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 var usersModule = require('../modules/MypjtModule');
 
-
-/**
-* @Auther : 이정열
-* @Date   : 2019.08.20
-* @Method_Comment : 마이프로젝트
-* @Param : type(is_Pjt_code) 
-* @return : 마이프로젝트 정보
-* type에 따라 module 분기처리
-*/
 router.get('/', function(req, res, next){
     router.use('/', usersModule);
     next('route')

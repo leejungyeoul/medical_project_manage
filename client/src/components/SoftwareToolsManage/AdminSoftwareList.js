@@ -22,8 +22,8 @@ class SoftwareList extends Component {
             endPage: 0, //페이징 마지막
             nowPage: 1, //현재 페이지
             page_size: 2, //페이지수 << 1 2 3 4 5 >>
-            append_paging:'',
-            lastpage_Flag: false,
+            append_paging:'', // 페이징폼
+            lastpage_Flag: false, // 마지막 페이지 여부
             small_flag: false, //페이지 사이즈보다 데이터 크기가 더 작은경우
             admin_usernm:'', //관리자 이름
             admin_userid:'', //관리자 아이디
@@ -31,6 +31,7 @@ class SoftwareList extends Component {
     }
 
     componentDidMount() {
+        // 세션 처리
         this.callSessionInfoApi()
         // SW Tool 리스트 호출
         this.callSwToolListApi()
@@ -245,7 +246,6 @@ class SoftwareList extends Component {
           })
     }
 
-    // ### render start ###
     render () {
         return (
             <section class="sub_wrap" >

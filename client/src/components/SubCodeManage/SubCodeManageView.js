@@ -9,12 +9,12 @@ class SubCodeManage extends Component {
         super(props);
 
         this.state = {
-            responseSubCodeList: '',//SubCode 리스트
-            append_SubCodeList: '',//SubCode 리스트
-            append_SubCodeList2: '',//SubCode 리스트
-            code: '',//code
-            beforecode: '',//beforecode
-            beforecodecolor: '',//beforecodecolor
+            responseSubCodeList: '',//SubCode response 리스트
+            append_SubCodeList: '',//SubCode 리스트1
+            append_SubCodeList2: '',//SubCode 리스트2
+            code: '',// 검색욕 subcode
+            beforecode: '',// 이전 선택 코드
+            beforecodecolor: '',// 이전 선택 코드 색상
             admin_usernm:'', //관리자 이름
             admin_userid:'', //관리자 아이디
         }
@@ -23,6 +23,7 @@ class SubCodeManage extends Component {
     componentDidMount() {
         // 서브 코드 리스트 호출
         this.callSubCodeListApi()
+        // 세션 처리
         this.callSessionInfoApi()
     }
 
@@ -235,7 +236,7 @@ class SubCodeManage extends Component {
         this.callSubCodeListApi(this.state.code)
     }
 
-    //alert 기본 함수
+    //코드 등록
     CodeRegister = (i, e) => {
         this.setState({ append_SubCodeList2: this.SubCodeListAppend2(i) });
 

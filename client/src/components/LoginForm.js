@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import cookie from 'react-cookies';
-
 import $ from 'jquery';
 import axios from "axios";
 import Swal from 'sweetalert2'
@@ -9,9 +8,6 @@ import Swal from 'sweetalert2'
 class LoginForm extends Component {
 
     state = {
-        email: '',
-        password: '',
-        cookies:''
     }
 
     submitClick = async e => {
@@ -45,6 +41,7 @@ class LoginForm extends Component {
                         const expires = new Date()
                         expires.setMinutes(expires.getMinutes() + 60)
 
+                        //userid 와 username을 비밀키로 암호화해 쿠키값에 세팅한다.
                         axios.post('/api/LoginForm?type=SessionState', {
                             is_Email: userid,
                             is_UserName: username,
@@ -55,21 +52,21 @@ class LoginForm extends Component {
                             , {
                                 path: '/',
                                 expires,
-                                // httpOnly: true
+                                // httpOnly: true // 도메인 연결 후 주석해제
                             })
 
                             cookie.save('username', response.data.token2
                             , {
                                 path: '/',
                                 expires,
-                                // httpOnly: true
+                                // httpOnly: true // 도메인 연결 후 주석해제
                             })
 
                             cookie.save('userpassword', upw
                             , {
                                 path: '/',
                                 expires,
-                                // httpOnly: true
+                                // httpOnly: true // 도메인 연결 후 주석해제
                             })
                             
                         })  
@@ -130,12 +127,14 @@ class LoginForm extends Component {
         }
     }
 
+    // 비밀번호 재설정
     pwdResetClick = () => {
         $('.m_login').hide();
         $('.m_pw').fadeIn();
         $('.m_pw').css('display','table-cell');
     }
 
+    // 비밀번호 재설정 취소
     pwdResetCancleClick = () => {
         $('.m_login').fadeIn();
         $('.m_pw').hide();
@@ -192,9 +191,7 @@ class LoginForm extends Component {
           })
     }
     
-    // ### render start ###
     render () {
-        
         return (
             <section className="main">
             {/* <!-- 로그인폼 --> */}
@@ -275,7 +272,6 @@ class LoginForm extends Component {
 }
 
 LoginForm.defaultProps = {
-
 }
 
 export default LoginForm;

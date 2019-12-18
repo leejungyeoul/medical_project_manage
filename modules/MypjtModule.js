@@ -11,20 +11,9 @@ var express = require('express');
 var router = express.Router();
 const bodyParser = require('body-parser');
 
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
-
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-
-/**
-* @Auther : 이정열
-* @Date   : 2019.09.03
-* @Method_Comment : 마이프로젝트
-* @Param : type(is_Pjt_code) 
-* @return : 마이프로젝트 정보
-*/
 router.post('/', (req, res, next) => {
   var m_typ = req.query.type;
 
@@ -61,7 +50,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'swtool'){
-    //Data source 리스트 조회
+    //Soft ware tool 리스트 조회
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -77,26 +66,9 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }
-  // else{//사용X
-  //   try {
-  //     // Mysql Api 모듈(CRUD)
-  //     var dbconnect_Module = require('./dbconnect_Module');
-  
-  //     //Mysql 쿼리 호출정보 입력
-  //     req.body.mapper = 'MyProjectMapper';//mybatis xml 파일명
-  //     req.body.crud = 'select';//select, insert, update, delete 중에 입력
-  //     req.body.mapper_id = 'selectMypjtList';
-  
-  //     router.use('/', dbconnect_Module);
-  //     next('route')
-  //   } catch (error) {
-  //     console.log("Module > dbconnect error : "+ error);      
-  //   }
-  // }
-
 
   if(m_typ == 'save'){
-    //Researcher 리스트 조회
+    //프로젝트 정보 삽입
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -111,7 +83,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'dsInsert'){
-    
+    // datasource 정보 삽입
     for(var i=0 ; i < req.body.arr_DataSourceData.length ; i++){
       try {
         // Mysql Api 모듈(CRUD)
@@ -133,6 +105,7 @@ router.post('/', (req, res, next) => {
     }
 
   }else if(m_typ == 'SwtInsert'){
+    // software tool 정보 삽입
     for(var i=0 ; i < req.body.arr_SwtooltData.length ; i++){
       try {
         // Mysql Api 모듈(CRUD)
@@ -153,6 +126,7 @@ router.post('/', (req, res, next) => {
       }
     }
   }else if(m_typ == 'SwtUpdateUrl'){
+    //새로운 프로젝트 코드로 업데이트
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -168,6 +142,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'ptcipantInsert'){
+    // 공동연구자 정보 삽입
     for(var i=0 ; i < req.body.arr_PtcipantDataEmail.length ; i++){
       try {
         // Mysql Api 모듈(CRUD)
@@ -189,6 +164,7 @@ router.post('/', (req, res, next) => {
       }
     }
   }else if(m_typ == 'uploadfile'){
+    // 업로드 파일 정보 삽입
     for(var i=0 ; i < req.body.arr_UploadFile.length ; i++){
       try {
         // Mysql Api 모듈(CRUD)
@@ -210,21 +186,23 @@ router.post('/', (req, res, next) => {
       }
     }
   }else if(m_typ == 'update_reply'){
-      try {
-        // Mysql Api 모듈(CRUD)
-        var dbconnect_Module = require('./dbconnect_Module');
-    
-        //Mysql 쿼리 호출정보 입력
-        req.body.mapper = 'MyProjectMapper';//mybatis xml 파일명
-        req.body.crud = 'update';//select, insert, update, delete 중에 입력
-        req.body.mapper_id = 'updateReplyCode';
-        
-        router.use('/', dbconnect_Module);
-        next('route')
-      } catch (error) {
-        console.log("Module > dbconnect error : "+ error);      
-      }
+    // 새로운 프로젝트 코드로 업데이트
+    try {
+      // Mysql Api 모듈(CRUD)
+      var dbconnect_Module = require('./dbconnect_Module');
+  
+      //Mysql 쿼리 호출정보 입력
+      req.body.mapper = 'MyProjectMapper';//mybatis xml 파일명
+      req.body.crud = 'update';//select, insert, update, delete 중에 입력
+      req.body.mapper_id = 'updateReplyCode';
+      
+      router.use('/', dbconnect_Module);
+      next('route')
+    } catch (error) {
+      console.log("Module > dbconnect error : "+ error);      
+    }
   }else if(m_typ == 'rollback' || m_typ == 'finish_mod'){
+    // 삽입중 오류시 rollback // 정상 완료시 finish_mod
     for(var i=0 ; i < req.body.arr_MapperList.length ; i++){
       try {
         // Mysql Api 모듈(CRUD)
@@ -244,6 +222,7 @@ router.post('/', (req, res, next) => {
       }
     }
   }else if(m_typ == 'parti_cencel'){
+    // 공동연구자 취소
       try {
         // Mysql Api 모듈(CRUD)
         var dbconnect_Module = require('./dbconnect_Module');
@@ -259,6 +238,7 @@ router.post('/', (req, res, next) => {
         console.log("Module > dbconnect error : "+ error);      
       }
   }else if(m_typ == 'Postpone'){
+    // 연구기간 연장 조회
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -274,6 +254,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'PostponeSave'){
+    // 연구기간 연장 삽입
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -289,6 +270,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'update_postpone'){
+    // 새로운 프로젝트 코드로 업데이트
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -304,6 +286,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'PostponeDelete'){
+    // 연장연구기간 정보 삭제
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -322,6 +305,7 @@ router.post('/', (req, res, next) => {
   
   // 어드민
   if(m_typ == 'DsApproval'){
+    // datasource 승인/반려
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -337,6 +321,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'SwApproval'){
+    // softwaretool 승인/반려
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -352,6 +337,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'PostApproval'){
+    // 연구기간 연장 승인/반려
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -367,6 +353,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'updatePjtStatus'){
+    // 프로젝트 상태 변경(등록, 진행, 취소, 완료, 연장요청)
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -382,6 +369,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'updateOriginPeriod'){
+    // 연장연구기간으로 업데이트
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');

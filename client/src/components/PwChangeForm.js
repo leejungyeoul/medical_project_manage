@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import cookie from 'react-cookies';
 import Swal from 'sweetalert2'
-
 import $ from 'jquery';
 import axios from "axios";
 
@@ -11,7 +9,7 @@ class LoginForm extends Component {
     super(props);
         this.state = {
             email: props.match.params.email, //이메일
-            token: props.match.params.token, //이메일 //token
+            token: props.match.params.token, //이메일 token
         }
     }
 
@@ -21,9 +19,17 @@ class LoginForm extends Component {
             is_Token : this.state.token,
         })
         .then( response => {
-            
+            if(response.data.json[0].usercode == undefined){
+                window.location.replace('about:blank')
+            }
         })
-        .catch( error => {this.sweetalert('작업 중 오류가 발생하였습니다.', error, 'error', '닫기')});
+        .catch( error => {
+            this.sweetalert('유효한 접속이 아닙니다.', error, 'error', '닫기')
+            setTimeout(function() {
+                window.location.replace('about:blank')    
+                }.bind(this),1000
+            );
+        });
     }
 
     // 회원가입 버튼 클릭시 validate check
@@ -114,8 +120,6 @@ class LoginForm extends Component {
                 this.sweetalert('작업 중 오류가 발생하였습니다.', error, 'error', '닫기')
             }
         }//fnValidate end
-
-        // 회원가입 정보 Insert    
     };
 
     //alert 기본 함수
@@ -139,7 +143,6 @@ class LoginForm extends Component {
         })
     }
 
-    // ### render start ###
     render () {
         return (
             <section className="main">
@@ -169,7 +172,6 @@ class LoginForm extends Component {
 }
 
 LoginForm.defaultProps = {
-
 }
 
 export default LoginForm;

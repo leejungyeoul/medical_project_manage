@@ -14,14 +14,6 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-
-/**
-* @Auther : 이정열
-* @Date   : 2019.09.04
-* @Method_Comment : Swtool 조회
-* @Param : type(is_Pjt_code) 
-* @return : Swtool
-*/
 router.post('/', (req, res, next) => {
   var m_typ = req.query.type;
   if(m_typ == 'list'){
@@ -153,8 +145,6 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }
-
- 
 });
 
 module.exports = router;

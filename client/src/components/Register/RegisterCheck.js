@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
-// jQuery
 import $ from 'jquery';
 
 class RegisterCheck extends Component {
@@ -73,7 +72,6 @@ class RegisterCheck extends Component {
           })
     }
 
-    // ### render start ###
     render () {
         return (
             <div>

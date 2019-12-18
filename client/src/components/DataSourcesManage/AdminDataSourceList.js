@@ -15,15 +15,15 @@ class DataSourceList extends Component {
             //페이징 변수
             total_size: 0, //전체 데이터
 
-            startRow: 0, //전체 정렬된 데이터중 추출할 시작 row
+            startRow: 0, //전체 정렬된 데이터 중 추출할 시작 row
             endRow: 5, //한 페이지에 표시할 Row수
             
             startPage: 1, //페이징 시작
             endPage: 0, //페이징 마지막
             nowPage: 1, //현재 페이지
             page_size: 2, //페이지수 << 1 2 3 4 5 >>
-            append_paging:'',
-            lastpage_Flag: false,
+            append_paging:'', //페이징 append 변수
+            lastpage_Flag: false, //마지막 페이지 여부
             small_flag: false, //페이지 사이즈보다 데이터 크기가 더 작은경우
         }
     }

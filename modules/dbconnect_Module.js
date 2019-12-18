@@ -10,37 +10,36 @@
 var express = require("express");
 var router = express.Router();
 const mysql = require("mysql");
-
 const bodyParser = require("body-parser");
-
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
+// Connection Pool 세팅
 const pool  = mysql.createPool({
   connectionLimit: 66,
   waitForConnections: true,
-  host: "*******************.ap-northeast-2.rds.amazonaws.com",
+  host: "rtroddb.ctxixa4ajljl.ap-northeast-2.rds.amazonaws.com",
   port: "3306",
   database: 'rtrod',
   user: "rtrod_user",
-  password: "**************",
+  password: "ajoumed1025",
 });
 
+// pool 동작 확인용 로깅 - 획득
 pool.on('acquire', function (connection) {
   console.log('Connection %d acquired', connection.threadId);
 });
-
+// pool 동작 확인용 로깅 - 연결
 pool.on('connection', function (connection) {
   console.log('SET SESSION auto_increment_increment=1');
 });
-
+// pool 동작 확인용 로깅 - 대기
 pool.on('enqueue', function () {
   console.log('Waiting for available connection slot');
 });
-
+// pool 동작 확인용 로깅 - 해제
 pool.on('release', function (connection) {
   console.log('Connection %d released', connection.threadId);
 });
@@ -84,6 +83,7 @@ router.post("/", (req, res) => {
       // 조회
       try {
         if (req.body.crud == "select") {
+          //로그인 정보 확인
           if (param.mapper_id == "selectLoginCheck" && m_typ != "modinfo") {
             if (json[0] == undefined) {
               res.send(null);

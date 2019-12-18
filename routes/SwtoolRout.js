@@ -17,19 +17,6 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 var usersModule = require('../modules/SwtoolModule');
 
-/**
-* @Auther : 이정열
-* @Date   : 2019.09.23
-* @Method_Comment : SWTools
-* @Param : type 
-* @return : Swtool 정
-* type에 따라 module 분기처리
-*/
-router.get('/', function(req, res, next){
-    router.use('/', usersModule);
-    next('route')
-});
-
 //post 테스트
 router.post('/', (req, res, next) => {
     router.use('/', usersModule);

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import {Link} from 'react-router-dom';
 import axios from "axios";
 import $ from 'jquery';
@@ -45,6 +44,7 @@ class SoftwareView extends Component {
         }else{
             $('.saveclass').hide()
         }
+        // 세션 처리
         this.callSessionInfoApi()
     }
 
@@ -223,7 +223,6 @@ class SoftwareView extends Component {
             }
 
             result.push(
-
                 <table class="table_ty1">
                     <tr>
                         <th>
@@ -440,9 +439,7 @@ class SoftwareView extends Component {
         })
     }
 
-    // ### render start ###
     render () {
-        
         return (
             <section class="sub_wrap">
                 <article class="s_cnt mp_pro_li ct1">

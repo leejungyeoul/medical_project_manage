@@ -4,8 +4,6 @@ import cookie from 'react-cookies';
 import 'react-app-polyfill/ie11';
 import axios from "axios";
 import Swal from 'sweetalert2'
-
-// jQuery
 import $ from 'jquery';
 
 class Header extends Component {
@@ -16,7 +14,6 @@ class Header extends Component {
             responseNotice: '',    //subcode response 변수
             append_NoticeFld: '',   //연구분야 append 변수
             notice_cnt: '',   //알림 갯수
-
             //세션 처리
             usernm:'', //사용자 이름
             userid:'', //사용자 아이디
@@ -84,17 +81,9 @@ class Header extends Component {
         $('.gn_2').stop().slideDown(300);
     };
 
+    // 커뮤니티 탭 드롭다운 이벤트
     mouseLeave () {
         $('.gn_2').stop().slideUp(300);
-    };
-
-    // 사이트맵 클릭 이벤트
-    sitemapClick () {
-        $('.pop_layout').fadeIn();
-		$("html").css("overflow","hidden");
-		$("body").css("overflow","hidden");
-		$('.pop_cnt').hide();
-		$('.pop_sitemap').show();
     };
 
     // 내 정보 영역 마우스 hover 이벤트
@@ -102,6 +91,7 @@ class Header extends Component {
         $(".hd_left > li > .box1").stop().fadeIn(400);
     }
     
+    // 내 정보 영역 마우스 hover 이벤트
     myInfoLeave () {
         $(".hd_left > li > .box1").stop().fadeOut(400);
     }
@@ -111,6 +101,7 @@ class Header extends Component {
         this.callNoticeApi('display')
     }
 
+    // 알림 영역 마우스 leave 이벤트
     alarmLeave () {
         $(".hd_left > li > .box0").stop().fadeOut(200);
     }

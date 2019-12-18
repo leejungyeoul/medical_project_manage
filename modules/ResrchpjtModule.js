@@ -11,20 +11,9 @@ var express = require('express');
 var router = express.Router();
 const bodyParser = require('body-parser');
 
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
-
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-
-/**
-* @Auther : 이정열
-* @Date   : 2019.09.04
-* @Method_Comment : Research project 조회/수정/삭제
-* @Param : type(is_Pjt_code) 
-* @return : Research project info
-*/
 router.post('/', (req, res, next) => {
   var m_typ = req.query.type;
   if(m_typ == 'list'){
@@ -44,7 +33,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'count'){
-    //Research Projects 리스트 조회
+    //Research Projects 리스트 count 조회
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -159,23 +148,23 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'save_reply'){
-        //댓글 insert
-        try {
-          // Mysql Api 모듈(CRUD)
-          var dbconnect_Module = require('./dbconnect_Module');
-      
-          //Mysql 쿼리 호출정보 입력
-          req.body.mapper = 'ResrchpjtMapper';//mybatis xml 파일명
-          req.body.crud = 'insert';//select, insert, update, delete 중에 입력
-          req.body.mapper_id = 'insertReplyinfo';
-          
-          router.use('/', dbconnect_Module);
-          next('route')
-        } catch (error) {
-          console.log("Module > dbconnect error : "+ error);      
-        }
-  }else if(m_typ == 'delete_reply'){
     //댓글 insert
+    try {
+      // Mysql Api 모듈(CRUD)
+      var dbconnect_Module = require('./dbconnect_Module');
+  
+      //Mysql 쿼리 호출정보 입력
+      req.body.mapper = 'ResrchpjtMapper';//mybatis xml 파일명
+      req.body.crud = 'insert';//select, insert, update, delete 중에 입력
+      req.body.mapper_id = 'insertReplyinfo';
+      
+      router.use('/', dbconnect_Module);
+      next('route')
+    } catch (error) {
+      console.log("Module > dbconnect error : "+ error);      
+    }
+  }else if(m_typ == 'delete_reply'){
+    //댓글 delete
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');
@@ -191,7 +180,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'update_prticipt'){
-    //댓글 insert
+    // 공동연구자 승인/반려
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');

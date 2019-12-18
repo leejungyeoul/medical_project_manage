@@ -51,9 +51,10 @@ class DataSourceView extends Component {
     }
 
     componentDidMount () {
-        // datasource 정보 호출
+        // SubCode 호출
         this.callSubCodeApi('DS')
         setTimeout(function() {
+            // datasource 정보 호출
             this.callDatasourceInfoApi()
             }.bind(this),100
         );

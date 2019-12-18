@@ -1,7 +1,7 @@
 /**
 * @since  : 2019.09.27
 * @auther : 이정열
-* @file_Comment : 메시지 모듈
+* @file_Comment : 메시지 모듈(시스템알림, 메일)
 * ----------------------
 * 개정이력
 * 2019.09.27 : 최초작성
@@ -18,14 +18,6 @@ const axios = require('axios');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-
-/**
-* @Auther : 이정열
-* @Date   : 2019.09.27
-* @Method_Comment : 메시지
-* @Param : type(is_Pjt_code) 
-* @return : 메시지 정보
-*/
 router.post('/', (req, res, next) => {
   var m_typ = req.query.type;
 
@@ -96,6 +88,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'email'){
+    //이메일 발송
     var m_roll = req.query.roll;
     let email = req.body.is_Email;
     let subject = req.body.is_Subject;
@@ -123,17 +116,20 @@ router.post('/', (req, res, next) => {
 
     var toHtml = ''
     if(m_roll == 'resetpw'){
+      // 비밀번호 재설정 메일 발송
       fs.readFile(__dirname+'/template/mail_template_pw.html', function (err, html) {
         toHtml = html.toString()
         toHtml = toHtml.replace('{replacetext}', home_url+'/PwChangeForm/'+ email +'/'+text)
       })
     }else if(m_roll == '2daybefore'){
+        // 프로젝트 종료 2일전 메일 발송
         var pjtName = req.body.is_PjtName;
         fs.readFile(__dirname+'/template/mail_template_notice.html', function (err, html) {
           toHtml = html.toString()
           toHtml = toHtml.replace('{replacetext}', pjtName)
         })
     }else if(m_roll == 'basic'){
+      // 단순 알림 메일 발송
       fs.readFile(__dirname+'/template/mail_template_basic.html', function (err, html) {
         toHtml = html.toString()
         toHtml = toHtml.replace('{replacetext}', postpone_txt)
@@ -142,6 +138,7 @@ router.post('/', (req, res, next) => {
 
     var email_use = true
     axios.post(home_url+'/api/system?type=system', {
+      //사이트 이메일 사용유무 체크
     })
     .then( response => {
       if(response.data.json[0].email_ym == 'Y'){

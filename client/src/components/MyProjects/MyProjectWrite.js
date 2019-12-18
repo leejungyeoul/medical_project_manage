@@ -7,7 +7,6 @@ import { RangeDatePicker } from '@y0c/react-datepicker';
 import "dayjs/locale/ko";
 import "../../css/red.scss";
 import '../../css/project.css';
-import { Redirect } from 'react-router-dom'
 
 import Swal from 'sweetalert2'
 
@@ -18,16 +17,12 @@ class MyProjectWrite extends Component {
         
         this.state = {
             rsc_field_menu_isDrop: true,    // 연구분야 메뉴 클릭 확인 변수
-            startDate: '',
-            endDate: '',
             responseSubCode: '',    //subcode response 변수
             append_ResrchFld: '',   //연구분야 append 변수
             ResrchFld_check: '',   //선택한 연구분야 변수
-            temp_name: '',
-            temp_id: '',
-            pjct_code: '',
-            notice_code: '',
-            pjt_status:'RS1',
+            pjct_code: '', // 저장될 프로젝트 코드
+            notice_code: '', // 저장될 알림 코드
+            pjt_status:'RS1', // 프로젝트 상태
 
             responseResearcherList: '',//공동연구자 리스트 response 변수
             append_ResearcherList: '', //공동연구자 리스트 append 변수
@@ -50,23 +45,23 @@ class MyProjectWrite extends Component {
             responseReplyList: '',//댓글 정보 response 변수
             append_ReplyList: '', //댓글 정보 append 변수
 
-            DataSourceData:[],
-            DataSourceflagData:[],
-            SwtooltData:[],
-            SwtooltflagData:[],
-            ptcipantDataEmail:[],
-            ptcipantDataName:[],
-            ptcipantDataFlag:[],
-            uploadFileName:[],
-            uploadFileRegdate:[],
-            uploadFileReguser:[],
-            deleteMapperList:['deleteProjectInfo','deleteDataSource','deleteSWTool','deleteParticipant', 'deleteUploadFile'],
+            DataSourceData:[], // datasource array
+            DataSourceflagData:[], // datasource 승인여부
+            SwtooltData:[],// sofrwaretool array
+            SwtooltflagData:[], // sofrwaretool 승인여부
+            ptcipantDataEmail:[], // 공동연구자 이메일
+            ptcipantDataName:[], // 공동연구자명
+            ptcipantDataFlag:[], // 공동연구자 승인여부
+            uploadFileName:[], // 업로드 파일명
+            uploadFileRegdate:[], // 파일 업로드 등록 날짜
+            uploadFileReguser:[], // 파일 업로드 등록 사용자
+            deleteMapperList:['deleteProjectInfo','deleteDataSource','deleteSWTool','deleteParticipant', 'deleteUploadFile'], // delete문 실행할 mapper 명
 
             //수정페이지로 사용
             flag: props.match.params.flag, //저장, 수정 페이지 구분
             before_pjtcode: props.match.params.pjtcode,//수정전 project 코드
             responseProjectInfo: '',//project 정보 response 변수
-            pjt_field_cd:'',
+            pjt_field_cd:'', // 연구 분야 코드
 
             responseParticipantInfo: '',//공동연구자 정보 response 변수
             
@@ -80,10 +75,10 @@ class MyProjectWrite extends Component {
             SwToolModiList:'',//수정페이지에서 기존에 등록된 SWtool 정보
             SwToolModiAcceptList:'',//수정페이지에서 기존에 등록된 승인 SWtool 정보
             SwToolWaitAcceptList:'',//수정페이지에서 기존에 등록된 승인대기 SWtool 정보
-            append_fileform:'',
+            append_fileform:'', // 파일 입력 폼
             
             //파일 업로드
-            file_result: [],
+            file_result: [], // 파일 업로드 결과 변수
             selectedFile: null, //업로드 대상 파일
 
             file_idx: 0,
@@ -113,7 +108,7 @@ class MyProjectWrite extends Component {
             userid:'', //사용자 아이디
 
             //software tool url 연동위한 변수
-            swt_code: ''
+            swt_code: '' // software tool 코드
 
         }
     }
@@ -471,7 +466,7 @@ class MyProjectWrite extends Component {
         }
     }
 
-    // 프로젝트 상세 SWtool 정보 append
+    // 분석하기 팝업에서 프로젝트 상세 SWtool 정보 append
     SWtoolInfoAppend2 = (type) => {
         try {
             let result = []
@@ -581,7 +576,7 @@ class MyProjectWrite extends Component {
         }
     }
 
-    // 프로젝트 상세 datasource 정보 append
+    // 분석하기 팝업에서 프로젝트 상세 datasource 정보 append
     DataSrceInfoAppend2 = (type) => {
         try {
             let result = []
@@ -674,12 +669,6 @@ class MyProjectWrite extends Component {
                 }
 
                 this.setState({ append_pctAddList: this.pctAddListAppend(username, useremail, txt)})
-                // if(append_text == ''){
-                //     append_text += (username+txt)
-                // }else{
-                //     append_text += ','+(username+txt)
-                // }
-                // $('#Ptcipant_val').val(append_text)
             }
         } catch (error) {
             this.sweetalert('작업중 오류가 발생하였습니다.', error, 'error', '닫기')
@@ -2163,7 +2152,6 @@ class MyProjectWrite extends Component {
         }
     } 
 
-    
     render () {
         return (
             <section className="sub_wrap" onClick={(e) => this.clickdetect(e)}>

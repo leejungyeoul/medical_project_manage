@@ -21,7 +21,7 @@ class ResearchProjects extends Component {
             responseProjectList: '',//project 리스트 response 변수
             append_PjtList: '',     //project 리스트 append 변수
 
-            temp_name: '',
+            temp_name: '', //연구분야, 연구상태 임시변수
             my_project_Flag: false,
 
             //검색용 변수
@@ -31,7 +31,7 @@ class ResearchProjects extends Component {
 
             //정렬용 변수
             sort_column:'update_date DESC',//정렬 컬럼 변수
-            before_sort: '',
+            before_sort: '',// 직전 정렬된 컬럼 변수
 
             //페이징 변수
             total_size: 0, //전체 데이터
@@ -43,11 +43,11 @@ class ResearchProjects extends Component {
             endPage: 0, //페이징 마지막
             nowPage: 1, //현재 페이지
             page_size: 5, //페이지수 << 1 2 3 4 5 >>
-            append_paging:'',
-            lastpage_Flag: false,
+            append_paging:'', // 페이징폼
+            lastpage_Flag: false, // 마지막 페이지 여부
             small_flag: false, //페이지 사이즈보다 데이터 크기가 더 작은경우
 
-            blockdetail: '',
+            blockdetail: '', // 프로젝트 상세로 진입 가능 여부(승인요청, 책임연구자, 공동연구자 자격이 아닌 경우)
 
             //세션 처리
             usernm:'', //사용자 이름
@@ -139,8 +139,8 @@ class ResearchProjects extends Component {
         this.callResrchpjtListApi()
     }
 
-     // 페이지 리스트 append
-     PagingAppend = () => {
+    // 페이지 리스트 append
+    PagingAppend = () => {
          let result = []
          
         var tmp = []
@@ -509,7 +509,6 @@ class ResearchProjects extends Component {
             })
     }
 
-    // ### render start ###
     render () {
         return (
             <section className="sub_wrap" >

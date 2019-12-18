@@ -1,11 +1,3 @@
-
-/*
-    파일첨부에 대한 function 구현이 필요함
-    댓글에 대한 function 구현이 필요함
-    공동연구자 참여 취소에 대한 처리 프로세스가 필요함
-    공동연구자 참여 승인/반려에 대한 팝업 처리시 프로세스가 필요함
- */
-
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import axios from "axios";
@@ -21,10 +13,10 @@ class MyProjectDetail extends Component {
         this.state = {
             isCo_researcher: false,     // 해당 프로젝트에서 공동연구자인 경우
             isResp_researcher: true,    // 해당 프로젝트에서 책임연구자인 경우
-            pjtcode: props.match.params.pjtcode,
+            pjtcode: props.match.params.pjtcode, // 리스트에서 선택한 프로젝트 코드
 
-            ownerRsrcher: '',
-            ownerRsrcherEmail: '',
+            ownerRsrcher: '', // 책임연구자명
+            ownerRsrcherEmail: '', // 책임연구자 이메일
 
             responseProjectInfo: '',//project 정보 response 변수
             append_PjtInfo: '',     //project 정보 append 변수
@@ -48,25 +40,24 @@ class MyProjectDetail extends Component {
             path: '', //연구 파일 다운로드 경로
 
             //공동연구자 승인 팝업변수
-            pjt_name: '',
-            ownerRsrcher: '',
-            pjt_period: '',
-            prtipant_flag: '/W',
+            pjt_name: '', //프로젝트 명
+            pjt_period: '', // 프로젝트 기간
+            prtipant_flag: '/W', //공동연구 승인여부
 
             //공동연구자 파일 업로드
-            append_fileform:'',            
-            file_result: [],
+            append_fileform:'', //파일 등록 폼  
+            file_result: [], // 파일 등록 폼 결과 변수
             selectedFile: null, //업로드 대상 파일
-            file_idx: 0,
+            file_idx: 0, // 파일 인덱스
             responseUploadfileInfo: '',//Uploadfile 정보 response 변수
             append_UploadfileInfo: '', //Uploadfile 정보 append 변수
-            uploadFileName:[],
-            uploadFileRegdate:[],
-            uploadFileReguser:[],
-            deleteMapperList:['deleteUploadFile'],
+            uploadFileName:[], // 연구파일명
+            uploadFileRegdate:[], //연구파일 등록일자
+            uploadFileReguser:[], //연구파일 등록 사용자
+            deleteMapperList:['deleteUploadFile'], //삭제할 mapper명
 
             //프로젝트 분석하기 버튼 노출 flag
-            analysis_flag:'Y',            
+            analysis_flag:'Y', // 분석하기 버튼 노출 여부           
 
             //세션 처리
             usernm:'', //사용자 이름
@@ -97,7 +88,6 @@ class MyProjectDetail extends Component {
                 $('.pj_joint').hide()
 
                 $('.bt_ty5').hide()
-                // $('.bt_ty6').hide()
                 
                 setTimeout(function() {
                     //파일 업로드 권한 부여
@@ -106,9 +96,6 @@ class MyProjectDetail extends Component {
                         $('.pv_bottom').show()
                         $('.submit_ty1').show()
                         $('.bt_ty5').show()
-                        if(this.state.analysis_flag == 'Y'){
-                            // $('.bt_ty6').show()
-                        }
                     }else if(this.state.prtipant_flag == '/W'){
                         $('.pj_joint').show()
                     }
@@ -149,6 +136,7 @@ class MyProjectDetail extends Component {
                 const body = await response.json();
                 this.setState({ responseUploadfileInfo: body });
                 if(this.state.prtipant_flag == '/A'){
+                    // 공동연구자 승인한 경우만 파일 다운로드 가능
                     this.setState({ append_UploadfileInfo: this.UploadFileInfoAppend2(node_url) });
                 }else{
                     this.setState({ append_UploadfileInfo: this.UploadFileInfoAppend1() });
@@ -609,8 +597,6 @@ class MyProjectDetail extends Component {
     //공동연구자 팝업 클릭
     AcceptedOrDeniedClick () {
         $('.pop_project3').fadeIn();		
-        // $("html").css("overflow","hidden");
-        // $("body").css("overflow","hidden");
     }
 
     //공동연구자 참여 취소
@@ -709,7 +695,6 @@ class MyProjectDetail extends Component {
             $('.submit_ty1').show()
             $('.bt_ty5').show()
             if(this.state.analysis_flag == 'Y'){
-                // $('.bt_ty6').show()
             }
             $('.pj_joint').hide()
             var pjt_name = this.state.responseProjectInfo.json[0].pjt_name
@@ -721,7 +706,6 @@ class MyProjectDetail extends Component {
             $('.pv_bottom').hide()
             $('.submit_ty1').hide()
             $('.bt_ty5').hide()
-            // $('.bt_ty6').hide()
             $('.pj_joint').hide()
             var pjt_name = this.state.responseProjectInfo.json[0].pjt_name
             this.sendNoticeMessage(this.state.ownerRsrcherEmail, cookie_username+'님이 '+pjt_name+' 프로젝트 공동연구자 참여를 반려했습니다.')
@@ -732,7 +716,6 @@ class MyProjectDetail extends Component {
             $('.pv_bottom').hide()
             $('.submit_ty1').hide()
             $('.bt_ty5').hide()
-            // $('.bt_ty6').hide()
         }
         this.callUploadFileInfoApi(this.state.pjtcode)
     }
@@ -1016,7 +999,6 @@ class MyProjectDetail extends Component {
           })
     }
 
-    // ### render start ###
     render () {
         return (
             <section className="sub_wrap">

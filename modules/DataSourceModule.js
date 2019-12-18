@@ -14,14 +14,6 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-
-/**
-* @Auther : 이정열
-* @Date   : 2019.09.04
-* @Method_Comment : DataSource 조회
-* @Param : type 
-* @return : DataSource
-*/
 router.post('/', (req, res, next) => {
   var m_typ = req.query.type;
   if(m_typ == 'list'){
@@ -105,7 +97,7 @@ router.post('/', (req, res, next) => {
       console.log("Module > dbconnect error : "+ error);      
     }
   }else if(m_typ == 'delbefore'){
-    //Swtool 관리자 수정
+    //Swtool 관리자 삭제
     try {
       // Mysql Api 모듈(CRUD)
       var dbconnect_Module = require('./dbconnect_Module');

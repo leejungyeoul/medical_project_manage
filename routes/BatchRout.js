@@ -21,11 +21,11 @@ cron.schedule('0 0 * * *', () => {
     //my sql 접속 정보 AWS
     const connection = mysql.createConnection({
       // host: 'localhost',
-      host: '*******************.ap-northeast-2.rds.amazonaws.com',
+      host: 'rtroddb.ctxixa4ajljl.ap-northeast-2.rds.amazonaws.com',
       user: 'rtrod_user',
       port: '3306',
       // database: '데이터베이스명칭',
-      password: '**************'
+      password: 'ajoumed1025'
     });
 
     mybatisMapper.createMapper(['./models/'+mapper+'.xml']);
@@ -61,7 +61,7 @@ cron.schedule('0 0 * * *', () => {
   
 });
 
-//매일 자정 프로젝트 종료처리
+//매일 00시 5분 프로젝트 종료처리 로깅
 cron.schedule('5 0 * * *', () => {
 
   var mapper = 'CommonMapper';//mybatis xml 파일명
@@ -75,11 +75,11 @@ cron.schedule('5 0 * * *', () => {
 
   const connection = mysql.createConnection({
     // host: 'localhost',
-    host: '*******************.ap-northeast-2.rds.amazonaws.com',
+    host: 'rtroddb.ctxixa4ajljl.ap-northeast-2.rds.amazonaws.com',
     user: 'rtrod_user',
     port: '3306',
     // database: '데이터베이스명칭',
-    password: '**************'
+    password: 'ajoumed1025'
   });
 
     mybatisMapper.createMapper(['./models/'+mapper+'.xml']);
@@ -147,11 +147,11 @@ function batch_exec(mapper, crud, mapper_id, filelist){
 
     const connection = mysql.createConnection({
       // host: 'localhost',
-      host: '*******************.ap-northeast-2.rds.amazonaws.com',
+      host: 'rtroddb.ctxixa4ajljl.ap-northeast-2.rds.amazonaws.com',
       user: 'rtrod_user',
       port: '3306',
       // database: '데이터베이스명칭',
-      password: '**************'
+      password: 'ajoumed1025'
     });
 
     mybatisMapper.createMapper(['./models/'+mapper+'.xml']);
@@ -223,11 +223,11 @@ cron.schedule('0 0 * * *', () => {
 
   const connection = mysql.createConnection({
     // host: 'localhost',
-    host: '*******************.ap-northeast-2.rds.amazonaws.com',
+    host: 'rtroddb.ctxixa4ajljl.ap-northeast-2.rds.amazonaws.com',
     user: 'rtrod_user',
     port: '3306',
     // database: '데이터베이스명칭',
-    password: '**************'
+    password: 'ajoumed1025'
   });
 
     mybatisMapper.createMapper(['./models/'+mapper+'.xml']);
@@ -310,11 +310,11 @@ function batch_log(batchcode, batchnm, batchlog){
 
   const connection = mysql.createConnection({
     // host: 'localhost',
-    host: '*******************.ap-northeast-2.rds.amazonaws.com',
+    host: 'rtroddb.ctxixa4ajljl.ap-northeast-2.rds.amazonaws.com',
     user: 'rtrod_user',
     port: '3306',
     // database: '데이터베이스명칭',
-    password: '**************'
+    password: 'ajoumed1025'
   });
 
     mybatisMapper.createMapper(['./models/'+mapper+'.xml']);
