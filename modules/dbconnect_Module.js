@@ -20,7 +20,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 const pool  = mysql.createPool({
   connectionLimit: 66,
   waitForConnections: true,
-  host: "rtroddb.ctxixa4ajljl.ap-northeast-2.rds.amazonaws.com",
+  host: "database-1.c9kj98ezdrrz.ap-northeast-2.rds.amazonaws.com",
   port: "3306",
   database: 'rtrod',
   user: "rtrod_user",

@@ -174,7 +174,6 @@ class Header extends Component {
             )
         }
         return result
-        
     }
     
     // 알림 메시지 읽음 처리

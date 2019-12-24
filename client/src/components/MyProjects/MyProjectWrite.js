@@ -1410,7 +1410,6 @@ class MyProjectWrite extends Component {
                 .then( response => {
                     // this.sweetalertSucc('토큰 저장 완료', true)
                     //연동 사이트에 토큰값 전달
-                    this.sessionTransper(cookie_userid, 'sfsdafsafdsfs3e23292k3k')
                     // window.open('http://127.0.0.1:6956','win0','location=no, width=1024,height=768,status=no,toolbar=no,scrollbars=no')
                     axios.get('/api/cmpathinfo')
                     .then(response => {
@@ -1427,16 +1426,6 @@ class MyProjectWrite extends Component {
         $("html").css("overflow","visible");
         $("body").css("overflow","visible");
     } 
-
-    //연동 사이트 세션 정보 전달
-    sessionTransper = (userid, token, e) => {
-        axios.post('/api/system?type=session', {
-            is_Token : token
-        })
-        .then( response => {
-        })
-        .catch( response => {this.sweetalert('작업중 오류가 발생하였습니다.', response, 'error', '닫기')});
-    }
 
     // 프로젝트 분석하기 팝업 영역 마우스 hover 이벤트
     InfoHover (type, e) {

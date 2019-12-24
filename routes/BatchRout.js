@@ -21,7 +21,7 @@ cron.schedule('0 0 * * *', () => {
     //my sql 접속 정보 AWS
     const connection = mysql.createConnection({
       // host: 'localhost',
-      host: 'rtroddb.ctxixa4ajljl.ap-northeast-2.rds.amazonaws.com',
+      host: 'database-1.c9kj98ezdrrz.ap-northeast-2.rds.amazonaws.com',
       user: 'rtrod_user',
       port: '3306',
       // database: '데이터베이스명칭',
@@ -75,7 +75,7 @@ cron.schedule('5 0 * * *', () => {
 
   const connection = mysql.createConnection({
     // host: 'localhost',
-    host: 'rtroddb.ctxixa4ajljl.ap-northeast-2.rds.amazonaws.com',
+    host: 'database-1.c9kj98ezdrrz.ap-northeast-2.rds.amazonaws.com',
     user: 'rtrod_user',
     port: '3306',
     // database: '데이터베이스명칭',
@@ -147,7 +147,7 @@ function batch_exec(mapper, crud, mapper_id, filelist){
 
     const connection = mysql.createConnection({
       // host: 'localhost',
-      host: 'rtroddb.ctxixa4ajljl.ap-northeast-2.rds.amazonaws.com',
+      host: 'database-1.c9kj98ezdrrz.ap-northeast-2.rds.amazonaws.com',
       user: 'rtrod_user',
       port: '3306',
       // database: '데이터베이스명칭',
@@ -223,7 +223,7 @@ cron.schedule('0 0 * * *', () => {
 
   const connection = mysql.createConnection({
     // host: 'localhost',
-    host: 'rtroddb.ctxixa4ajljl.ap-northeast-2.rds.amazonaws.com',
+    host: 'database-1.c9kj98ezdrrz.ap-northeast-2.rds.amazonaws.com',
     user: 'rtrod_user',
     port: '3306',
     // database: '데이터베이스명칭',
@@ -310,7 +310,7 @@ function batch_log(batchcode, batchnm, batchlog){
 
   const connection = mysql.createConnection({
     // host: 'localhost',
-    host: 'rtroddb.ctxixa4ajljl.ap-northeast-2.rds.amazonaws.com',
+    host: 'database-1.c9kj98ezdrrz.ap-northeast-2.rds.amazonaws.com',
     user: 'rtrod_user',
     port: '3306',
     // database: '데이터베이스명칭',

@@ -11,13 +11,6 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
 
-/**
- * @Auther : 이정열
- * @Date   : 2019.08.20
- * @Method_Comment : 로그인/회원가입 라우팅
- * @Param : type(login, logout, signup)
- * @return : 사용자 정보
- */
 var commonRouter = require("./routes/CommonRout");
 var usersRouter = require("./routes/UsersRout");
 var resrchpjtRout = require("./routes/ResrchpjtRout");
@@ -25,7 +18,6 @@ var mypjtRouter = require("./routes/MypjtRout");
 var swtoolRouter = require("./routes/SwtoolRout");
 var dataSourceRouter = require("./routes/DataSourceRout");
 var NoticeRouter = require("./routes/NoticeRout");
-
 var cmpathinfo = require("./config/CmPathInfo");
 var fileuploadRouter = require("./routes/UploadRout");
 var MessageRoutRouter = require("./routes/MessageRout");
@@ -70,10 +62,7 @@ app.use("/api/Notice", NoticeRouter);
 //시스템 배치
 app.use("/api/BatchRout", BatchRout);
 
+//파일 업로드 경로 설정
 app.use(express.static("./uploads"));
-
-//test 회원 정보 조회
-app.use("/api/getUser/:id", usersRouter);
-app.use("/api/postTest", usersRouter);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
